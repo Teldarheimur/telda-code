@@ -1,6 +1,6 @@
-void intTos(char *str, unsigned short num) {
+void intTos(register char *str, register unsigned short num) {
     {
-        unsigned short num_ = num;
+        register unsigned short num_ = num;
         do {
             str++;
         } while (num_ /= 10);

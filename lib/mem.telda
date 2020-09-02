@@ -1,45 +1,45 @@
 # [$, len, *src, *dest]
 #     +2   +4    +6
 Copy:
-load $bc, [$sp+4]
-load [$sp+2]
+    load $bc, [$sp+4]
+    load [$sp+2]
 loop_Copy:
-cmp
-jez Return
-load $a, [$bc]
-str $a, [$sp+6]
-inc $bc
-load [$sp+6]
-inc
-str $sp+6 
-load [$sp+2]
-dec
-str $sp+2
-jump loop_Copy
+    cmp
+    jez Return
+    load $a, [$bc]
+    str $a, [$sp+6]
+    inc $bc
+    load [$sp+6]
+    inc
+    str $sp+6 
+    load [$sp+2]
+    dec
+    str $sp+2
+    jump loop_Copy
 
 # [$, len, *dest, val]
 #     +2   +4     +6  +7
 #     end
 Set:
-load $bc, [$sp+4]
-# Used to take $a, but now size matching is more restrictive TODO fix
-load $ac, $bc
-add [$sp+2]
-str 0, $sp+2
-load $a, [$sp+6]
+    load $bc, [$sp+4]
+    # Used to take $a, but now size matching is more restrictive TODO fix
+    load $ac, $bc
+    add [$sp+2]
+    str 0, $sp+2
+    load $a, [$sp+6]
 loop_Set:
-cmp $bc, [$sp+2]
-jez Return
-str $a, $bc
-inc $bc
-jmp loop_Set
+    cmp $bc, [$sp+2]
+    jez Return
+    str $a, $bc
+    inc $bc
+    jmp loop_Set
 
 # [$, len, *dest]
 #     +2   +4    +6
 Zero:
-load $bc, [$sp+4]
-load $ac, $bc
-add [$sp+2]
-str 0, $sp+2
-load
-jmp loop_Set
+    load $bc, [$sp+4]
+    load $ac, $bc
+    add [$sp+2]
+    str 0, $sp+2
+    load
+    jmp loop_Set

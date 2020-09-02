@@ -4,6 +4,6 @@ hello:
 data "Hello World!\0"
 
 start:
-pushw hello
-call Print
-halt
+    pushw hello
+    call Print
+    halt
