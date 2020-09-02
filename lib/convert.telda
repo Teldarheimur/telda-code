@@ -7,9 +7,8 @@ IntTos:
     load $ac, [$sp+4]
 
 num_len:
-    div $ac, 10
     inc $bc
-    cmp $ac, 0
+    div $ac, 10
     jnz num_len
     # put the final null byte already
     load $a, 0
@@ -22,7 +21,7 @@ loop_IntTos:
     # get the next unit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
     rem $ac, 10
     add $a, '0'
-    # then put it into the string and increment the pointer
+    # then put it into the string and decrement the pointer
     str $a, $bc
     dec $bc
 
@@ -30,8 +29,6 @@ loop_IntTos:
     load $ac, [$sp+4]
     div $ac, 10
     str $ac, $sp+4
-    # dunno why this is needed :( flag should've been set from div instruction
-    cmp $ac, 0
     jnz loop_IntTos
 
     ret
