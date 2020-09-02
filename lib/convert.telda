@@ -1,0 +1,42 @@
+# Make sure that str is at least log_10(num) long (6 is max for 16-bit ints (remember the final null-byte in the string))
+# [$, *str, num]
+#     +2    +4  +6
+IntTos:
+    # use $bc for the string pointer and $ac for the calculations
+    load $bc, [$sp+2]
+    load $ac, [$sp+4]
+
+num_len:
+    div $ac, 10
+    inc $bc
+    cmp $ac, 0
+    jnz num_len
+    # put the final null byte already
+    load $a, 0
+    str $a, $bc
+    dec $bc
+
+    load $ac, [$sp+4]
+
+loop_IntTos:
+    # get the next unit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
+    rem $ac, 10
+    add $a, '0'
+    # then put it into the string and increment the pointer
+    str $a, $bc
+    dec $bc
+
+    # divide by 10 to get the next number, and just return if the result is zero
+    load $ac, [$sp+4]
+    div $ac, 10
+    str $ac, $sp+4
+    # dunno why this is needed :( flag should've been set from div instruction
+    cmp $ac, 0
+    jnz loop_IntTos
+
+    ret
+
+# can't be arsed to implement this yet
+Parse:
+# the invalid instruction
+    dat 0x00

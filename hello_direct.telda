@@ -1,0 +1,28 @@
+start:
+    load 'H'
+    int2
+    load 'e'
+    int2
+    load 'l'
+    int2
+    load 'l'
+    int2
+    load 'o'
+    int2
+    load ' '
+    int2
+    load 'W'
+    int2
+    load 'o'
+    int2
+    load 'r'
+    int2
+    load 'l'
+    int2
+    load 'd'
+    int2
+    load '!'
+    int2
+    load '\n'
+    int2
+    halt

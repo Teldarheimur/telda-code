@@ -1,0 +1,10 @@
+start:
+    int1
+    int2
+    int1
+    int2
+    int1
+    int2
+    int1
+    int2
+    jmp start

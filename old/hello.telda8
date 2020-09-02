@@ -1,0 +1,20 @@
+hello:
+    dat "Hello World"
+hello_end:
+    dat "\n"
+
+start:
+    load hello
+loop:
+    # Load the character at the current index and print it
+    int2 [$ac]
+    # If it's a newline we're done now
+    cmp hello_end
+    jez end
+    # Increment the character index
+    inc
+
+    jmp loop
+
+end:
+    halt

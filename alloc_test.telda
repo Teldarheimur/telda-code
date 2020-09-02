@@ -1,0 +1,19 @@
+include lib/io.telda, lib/convert.telda
+
+start:
+
+    pushw 6
+    call Malloc
+    add $sp, 2
+
+    pushw 0, $ac
+    pushw [$sp]
+    call IntTos
+    call Print
+    add $sp, 4
+
+    halt
+
+# Needs to be included at the bottom, otherwise the heap is very short
+
+include lib/alloc.telda

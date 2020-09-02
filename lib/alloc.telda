@@ -1,0 +1,50 @@
+# [$, length]
+#     +2
+# Returns $ac
+# Returns pointer to an area of memory with the given to be used for anything
+# call Free with pointer later when done with it
+Malloc:
+    # make the length a multiple of two (add one if it's odd)
+    load $ac, 1
+    and $ac, [$sp+2]
+    add $ac, [$sp+2]
+    # return a null pointer early if length is zero
+    jez return_Malloc
+    str $ac, $sp+2
+    # set last bit to 1 indicating it is occupied
+    or $ac, 1
+
+    str $ac, [next_free]
+    load $ac, [next_free]
+    load $bc, $ac
+    add $bc, [$sp+2]
+    str $bc, next_free
+
+    return_Malloc:
+    ret
+
+# [$, *memory_to_free]
+#    +2
+# frees the memory in that area, so that it can be given to someone else
+Free:
+    # Do nothing, who cares about memory leaks?
+    ret
+
+
+error:
+data "coming soon\n", 0
+
+Realloc:
+Calloc:
+    pushw error
+    call Print
+    halt
+
+# static variable
+next_free:
+dat heap
+
+heap:
+dat 0x0000
+# Load some zeroes in there to begin with
+dat 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

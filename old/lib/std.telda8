@@ -1,0 +1,39 @@
+Halt:
+start:
+halt
+
+Pc:
+load [$sp]
+ret
+Pc_b:
+load $bc, [$sp]
+ret
+
+Write:
+load $bc, [$sp+1]
+loop_Write:
+load [$bc]
+cmp '\0'
+jez Return
+int2
+inc $bc
+jmp loop_Write
+
+Print:
+load $bc, [$sp+1]
+call loop_Write
+int2 '\n'
+Return:
+ret
+
+Getl:
+load $bc, [$sp+1]
+
+loop_Getl:
+int1
+cmp '\n'
+jez Return
+str $bc
+inc $bc
+
+jump loop_Getl

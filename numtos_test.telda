@@ -1,0 +1,10 @@
+include lib/io.telda, lib/convert.telda
+
+start:
+pushw ~54321
+# dirty to use the start as the string buffer, but these pushws are long enough
+pushw start
+call NumTos
+call Print
+
+halt

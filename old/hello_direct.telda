@@ -1,0 +1,15 @@
+start:
+    int2 'H'
+    int2 'e'
+    int2 'l'
+    int2 'l'
+    int2 'o'
+    int2 ' '
+    int2 'W'
+    int2 'o'
+    int2 'r'
+    int2 'l'
+    int2 'd'
+    int2 '!'
+    int2 '\n'
+    halt

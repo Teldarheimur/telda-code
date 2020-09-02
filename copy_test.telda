@@ -1,0 +1,29 @@
+include lib/std.telda, lib/mem.telda
+
+start:
+pushw buf
+pushw hello
+pushw 4
+call Copy
+add $sp, 6
+
+pushw buf
+call Print
+add $sp, 2
+
+push '!'
+pushw buf
+pushw 4
+call Set
+add $sp, 5
+
+pushw buf
+call Print
+add $sp, 2
+
+halt
+
+hello:
+dat "hello\0"
+buf:
+dat 0,0,0,0,0,0,0,0,0,0,0,0,0,0
