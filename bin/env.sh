@@ -1,3 +1,3 @@
 #!/bin/bash
-export TELDABIN=/home/falch/Dev/Telda/bin
-export PATH=/home/falch/Dev/Telda/bin:$PATH
+export TELDABIN=$(realpath $(dirname "${BASH_SOURCE[0]}"))
+export PATH=$TELDABIN:$PATH

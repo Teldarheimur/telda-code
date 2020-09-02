@@ -1,3 +1,3 @@
 #!/bin/bash
-cd $HOME/dev/rs/telda
+cd $TELDABIN/telda_bin
 cargo build $@
