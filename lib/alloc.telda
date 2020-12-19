@@ -20,7 +20,7 @@ Malloc:
     add $bc, [$sp+2]
     str $bc, next_free
 
-    return_Malloc:
+return_Malloc:
     ret
 
 # [$, *memory_to_free]

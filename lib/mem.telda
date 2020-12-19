@@ -41,5 +41,5 @@ Zero:
     load $ac, $bc
     add [$sp+2]
     str 0, $sp+2
-    load
+    load $ac, 0
     jmp loop_Set

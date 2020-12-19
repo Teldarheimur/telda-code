@@ -1,0 +1,50 @@
+include lib/io.telda, lib/convert.telda
+
+num_str:
+dat 0,0,0,0,0,0
+
+list:
+dat ~87, ~828, ~132, ~500, ~413, ~404, ~101, ~346, ~928, ~641, ~509, ~7, ~667, ~666, ~327, ~419
+list_end:
+
+dat "START:"
+start:
+    pushw list
+    pushw 32
+    call sort
+
+    # add $sp, 4
+
+    pushw list
+printListLoop:
+    load $bc, [$sp]
+    load $ac, [$bc]
+    pushw num_str
+    pushw 0, $ac
+    int15
+    call IntTos
+    pushw num_str
+    int15
+    call Write
+    load ' '
+    int2
+    add $sp, 6
+    popw $bc
+    add $bc, 2
+    pushw 0, $bc
+    cmp $bc, list_end
+    jlt printListLoop
+
+    # Print a newline and halt
+    load '\n'
+    int2
+    halt
+
+
+#[$, list, len]
+#    +2    +4 +6
+sort:
+    load $ac, 0x0000
+    load $bc, [$sp+2]
+    str $ac, $bc+2
+    ret
