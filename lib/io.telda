@@ -9,36 +9,41 @@ Pc_b:
     load $ba, [$sp]
     ret
 
+# [$, *str]
+#     +2
+# *str a null-terminated string
 Write:
-    load $ba, [$sp+2]
+    load $sr, [$sp+2]
 loop_Write:
-    load [$ba]
+    sld $ab
     cmp '\0'
     jez Return
     int2
-    inc $ba
     jmp loop_Write
 
 Print:
-    load $ba, [$sp+2]
+    load $sr, [$sp+2]
     call loop_Write
     load '\n'
     int2
 Return:
     ret
 
+# [$, *dest]
+#     +2
+# writes a null-terminated string from a line from STDIN
+# this is pretty unsafe, since the line could be bigger than your buffer
 Getl:
-    load $ba, [$sp+2]
+    load $ds, [$sp+2]
 
 loop_Getl:
     int1
     cmp $ab, '\n'
     jez end_Getl
-    str $ab, $ba
-    inc $ba
+    sst 0, $ab
 
     jump loop_Getl
 end_Getl:
-    load $ab, 0
+    xor $ab, $ab
     str $ab, $ba
     ret
