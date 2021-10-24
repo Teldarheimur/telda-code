@@ -11,9 +11,7 @@ Copy:
 loop_Copy:
     # if we're now at the end, let's return
     cmp $sr, $ba
-    intf
     jez Return
-    int2
     smv
     jump loop_Copy
 
