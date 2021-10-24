@@ -1,9 +1,9 @@
 include lib/io.telda, lib/convert.telda
 
 start:
-    pushw ~21
-    # dirty to use the start as the string buffer, but these pushws are long enough
-    pushw start
+    push ~21
+    # dirty to use the start as the string buffer, but these pushs are long enough
+    push start
     call IntTos
     call Print
 

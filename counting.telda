@@ -1,0 +1,24 @@
+include lib/io.telda, lib/convert.telda
+
+start:
+    # i = 0
+    load $ac, ~0
+loop:
+    # i
+    push 0, $ac
+
+    # inttos(i, num_str); print(num_str);
+    push 0, $ac
+    push num_str
+    call IntTos
+    call Print
+    add $sp, ~4
+
+    # i++
+    pop $ac
+    inc $ac
+    # if(i == 100) halt();
+    cmp $ac, ~100
+    jez Halt
+    jmp loop
+num_str:

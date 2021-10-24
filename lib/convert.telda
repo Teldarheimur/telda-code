@@ -2,33 +2,33 @@
 # [$, *str, num]
 #     +2    +4  +6
 IntTos:
-    # use $bc for the string pointer and $ac for the calculations
-    load $bc, [$sp+2]
+    # use $ba for the string pointer and $ac for the calculations
+    load $ba, [$sp+2]
     load $ac, [$sp+4]
 
 num_len:
-    inc $bc
-    div $ac, 10
+    inc $ba
+    div $ac, ~10
     jnz num_len
     # put the final null byte already
-    load $a, 0
-    str $a, $bc
-    dec $bc
+    load $ab, 0
+    str $ab, $ba
+    dec $ba
 
     load $ac, [$sp+4]
 
 loop_IntTos:
     # get the next unit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
-    rem $ac, 10
-    add $a, '0'
+    rem $ac, ~10
+    add $ab, '0'
     # then put it into the string and decrement the pointer
-    str $a, $bc
-    dec $bc
+    str $ab, $ba
+    dec $ba
 
     # divide by 10 to get the next number, and just return if the result is zero
     load $ac, [$sp+4]
-    div $ac, 10
-    str $ac, $sp+4
+    div $ac, ~10
+    sas $ac, ~4
     jnz loop_IntTos
 
     ret

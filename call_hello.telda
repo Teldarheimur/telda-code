@@ -1,9 +1,9 @@
-include lib/std.telda
+include lib/io.telda
 
 hello:
 data "Hello World!\0"
 
 start:
-    pushw hello
+    push hello
     call Print
     halt

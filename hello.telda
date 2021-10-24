@@ -4,16 +4,16 @@ hello_end:
     dat "\n"
 
 start:
-    load $bc, hello
+    load $ba, hello
 loop:
     # Load the character at the current index and print it
-    load [$bc]
+    load [$ba]
     int2
     # If it's the end, we're done now
-    cmp $bc, hello_end
+    cmp $ba, hello_end
     jez end
     # Increment the character index
-    inc $bc
+    inc $ba
 
     jmp loop
 

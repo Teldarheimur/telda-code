@@ -1,45 +1,42 @@
 # [$, len, *src, *dest]
 #     +2   +4    +6
 Copy:
-    load $bc, [$sp+4]
-    load [$sp+2]
+    load $ba, [$sp+2]
+    load $sr, [$sp+4]
+    load $ds, [$sp+6]
+    # calculate end of string
+    add $ba, $sr
+    # set direction to positive
+    sdp
 loop_Copy:
-    cmp
+    # if we're now at the end, let's return
+    cmp $sr, $ba
+    intf
     jez Return
-    load $a, [$bc]
-    str $a, [$sp+6]
-    inc $bc
-    load [$sp+6]
-    inc
-    str $sp+6 
-    load [$sp+2]
-    dec
-    str $sp+2
+    int2
+    smv
     jump loop_Copy
 
 # [$, len, *dest, val]
 #     +2   +4     +6  +7
 #     end
 Set:
-    load $bc, [$sp+4]
-    # Used to take $a, but now size matching is more restrictive TODO fix
-    load $ac, $bc
+    # Load val into $bb
+    load $bb, [$sp+6]
+set_:
+    load $ds, [$sp+4]
+    # Load *end of string into $ac
+    load $ac, $ds
     add [$sp+2]
-    str 0, $sp+2
-    load $a, [$sp+6]
+    sdp
 loop_Set:
-    cmp $bc, [$sp+2]
+    cmp $ds, $ac
     jez Return
-    str $a, $bc
-    inc $bc
+    sst 0, $bb
     jmp loop_Set
 
 # [$, len, *dest]
 #     +2   +4    +6
 Zero:
-    load $bc, [$sp+4]
-    load $ac, $bc
-    add [$sp+2]
-    str 0, $sp+2
-    load $ac, 0
-    jmp loop_Set
+    load $bb, 0
+    jmp set_
