@@ -7,5 +7,4 @@ start:
     call IntTos
     call Print
 
-    int15
     halt

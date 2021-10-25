@@ -33,7 +33,45 @@ loop_IntTos:
 
     ret
 
-# can't be arsed to implement this yet
+# [$, *str]
+#     +2
+# -> $ac
+# returns number giving by the string in the $ac register
 Parse:
-# the invalid instruction
-    dat 0x00
+    load $sr, [$sp+2]
+    sdp
+loop_to_end_Parse:
+    sld $ab
+    cmp $ab, 0
+    jne loop_to_end_Parse
+    # start $ac at 0
+    xor $ac, $ac
+    # go through the array from the lowest digit
+    sdn
+    sub $sr, ~2
+    # multiplier
+    load $ds, ~1
+loop_to_start_Parse:
+    cmp $sr, [$sp+2]
+    jlt ret_Parse
+    # Make sure upper bits are zero
+    load $ba, ~0
+    # And read the next digit
+    sld $bb
+    sub $bb, '0'
+    # Return zero if the digit is invalid
+    cmp $bb, 9
+    jgt ret_zero
+    # acc += $bb * $ds
+    # $ds *= 10
+    mul $ba, $ds
+    mul $ds, ~10
+    add $ac, $ba
+
+    jmp loop_to_start_Parse
+
+ret_zero:
+    xor $ac, $ac
+ret_Parse:
+    sdp
+    ret
