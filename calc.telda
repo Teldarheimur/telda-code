@@ -1,0 +1,20 @@
+include lib/io.telda, lib/convert.telda
+
+start:
+    push buf
+    call Getl
+    call Parse
+    push 0, $ac
+    push buf
+    call Getl
+    call Parse
+    pop $ba
+    pop $ba
+    add $ac, $ba
+    push 0, $ac
+    push buf
+    call IntTos
+    call Print
+
+    halt
+buf:
