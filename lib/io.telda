@@ -45,5 +45,5 @@ loop_Getl:
     jump loop_Getl
 end_Getl:
     xor $ab, $ab
-    str $ab, $ba
+    str $ab, $ds
     ret
