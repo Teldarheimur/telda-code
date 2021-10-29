@@ -1,20 +1,15 @@
 hello:
-    dat "Hello World"
-hello_end:
-    dat "\n"
+    dat "Hello World\n", 0
 
 start:
-    load $ba, hello
+    load $sr, hello
 loop:
     # Load the character at the current index and print it
-    load [$ba]
-    int2
-    # If it's the end, we're done now
-    cmp $ba, hello_end
+    sld $ab
+    # If it's a null byte, we jump to the end
     jez end
-    # Increment the character index
-    inc $ba
-
+    # Otherwise print the character and loop
+    int2
     jmp loop
 
 end:
