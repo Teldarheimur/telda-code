@@ -1,56 +1,23 @@
-data "strcmp"
-
-
 # [$, *s1, *s2, ...]
-# Returns $a, 0 if equal
+# Returns $ab, 0 if equal
+# sets flags according to $ab too
 Strcmp:
-
-    # c [$sp]
-    # (ret_p [$sp+1])
-    # s1 [$sp+3]
-    # s2 [$sp+5]
-
-    # char c;
-    sub $sp, ~1
-
+    load $sr, [$sp+2]
+    load $ds, [$sp+4]
+    sdp
 loop_Strcmp:
-
-    # c = s1[0];
-    load $ba, [$sp+3]
-    load $ab, [$ba]
-    str $ab, $sp
-
-    # load s2[0] into $a
-    load $ba, [$sp+5]
-    load $ab, [$ba]
+    sld $ab
+    load $bb, [$ds]
 
     # compare and return if not equal
-    cmp $ab, [$sp]
-
-    jne not_same
+    sub $ab, $bb
+    jnz return
 
     # check if any is zero
-    cmp $ab, 0
-    jez ret_zero_loaded
-    load $ab, [$sp]
-    cmp $ab, 0
-    jez ret_zero
-
-    # increment the pointers and loop
-    load [$sp+3]
-    inc
-    sas $ab, 3
-    load [$sp+5]
-    inc
-    sas $ab, 5
-
+    load $ab, $bb
+    jez return
+    # manually increment $ds, since we can only string load from $sr
+    inc $ds
     jump loop_Strcmp
-
-ret_zero:
-    load $ab, [$ba]
-ret_zero_loaded:
-    sub $ab, [$sp]
-
-not_same:
-    add $sp, ~1
+return:
     ret 4
