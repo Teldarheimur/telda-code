@@ -33,6 +33,27 @@ loop_IntTos:
 
     ret
 
+# Signed int to string
+# Make sure that str is at least log_10(num) long (7 is max for 16-bit ints (remember the final null-byte in the string))
+# [$, *str, num]
+#     +2    +4  +6
+SintTos:
+    load $ba, [$sp+2]
+    load $ac, [$sp+4]
+    jns num_len
+
+    load $ab, '-'
+    str $ab, $ba
+    inc $ba
+    load $ac, [$sp+4]
+    neg $ac
+    # store it in the num arg, because it is re-loaded
+    # after finding the length
+    sas $ac, ~4
+    # we can ignore overflow since -MIN_INT wraps to MIN_INT
+    # which if interpreted unsigned is actually abs(MIN_INT)
+    jump num_len
+
 # [$, *str]
 #     +2
 # -> $ac
@@ -40,8 +61,22 @@ loop_IntTos:
 Parse:
     load $sr, [$sp+2]
     sdp
+    # Check for minus
+    # store multiplier in $ds
+    load $ds, ~1
+    sld $ab
+    cmp $ab, '-'
+    # If it wasn't '-', we'll assume it was a digit
+    # and skip straight into the loop to the end
+    jne wasnotminus_Parse
+    # if it was '-', we set the multiplier
+    # to be negative 1, and store the new string start
+    load $ds, ~-1
+    # Set string start to be after '-'
+    sas $sr, ~2
 loop_to_end_Parse:
     sld $ab
+wasnotminus_Parse:
     cmp $ab, 0
     jne loop_to_end_Parse
     # start $ac at 0
@@ -49,11 +84,9 @@ loop_to_end_Parse:
     # go through the array from the lowest digit
     sdn
     sub $sr, ~2
-    # multiplier
-    load $ds, ~1
 loop_to_start_Parse:
     cmp $sr, [$sp+2]
-    jlt ret_Parse
+    jb ret_Parse
     # Make sure upper bits are zero
     load $ba, ~0
     # And read the next digit
@@ -61,7 +94,7 @@ loop_to_start_Parse:
     sub $bb, '0'
     # Return zero if the digit is invalid
     cmp $bb, 9
-    jgt ret_zero
+    ja ret_zero
     # acc += $bb * $ds
     # $ds *= 10
     mul $ba, $ds

@@ -1,20 +1,42 @@
 include lib/io.telda, lib/convert.telda
 
+signed:
+    dat 0x000
+
+set_signed:
+    cmp '-'
+    jne Return
+    load $ab, 1
+    # have to store as u16 because str can't have unmatched sizes
+    str $ac, signed
+    ret
+
 start:
     push buf
     call Getl
+    # set signed to 1, if the first char is -
+    load $ab, [buf]
+    call set_signed
     call Parse
     push 0, $ac
     push buf
     call Getl
+    # set signed to 1, if the first char is -
+    load $ab, [buf]
+    call set_signed
     call Parse
-    pop $ba
-    pop $ba
-    add $ac, $ba
+    pop $ds
+    pop $ds
+    add $ac, $ds
     push 0, $ac
     push buf
+    load $bb, [signed]
+    jnz signed_print
     call IntTos
     call Print
-
+    halt
+signed_print:
+    call SintTos
+    call Print
     halt
 buf:

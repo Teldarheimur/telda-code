@@ -6,5 +6,17 @@ start:
     push start
     call IntTos
     call Print
+    push ~-21
+    push start
+    call SintTos
+    call Print
+    push ~-32768
+    push start
+    call SintTos
+    call Print
+    push ~1234
+    push start
+    call SintTos
+    call Print
 
     halt
