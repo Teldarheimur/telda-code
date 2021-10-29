@@ -2,33 +2,31 @@
 # [$, *str, num]
 #     +2    +4  +6
 IntTos:
-    # use $ba for the string pointer and $ac for the calculations
-    load $ba, [$sp+2]
+    # use $ds for the string pointer and $ac for the calculations
+    load $ds, [$sp+2]
     load $ac, [$sp+4]
+sinttos_entry_IntTos:
+    load $ba, $ac
+    sdn
 
 num_len:
-    inc $ba
+    inc $ds
     div $ac, ~10
     jnz num_len
-    # put the final null byte already
-    load $ab, 0
-    str $ab, $ba
-    dec $ba
 
-    load $ac, [$sp+4]
+    # put the final null byte already (utilise that $ac contains zero rn)
+    sst 0, $ab
 
 loop_IntTos:
+    load $ac, $ba
     # get the next unit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
     rem $ac, ~10
     add $ab, '0'
     # then put it into the string and decrement the pointer
-    str $ab, $ba
-    dec $ba
+    sst 0, $ab
 
     # divide by 10 to get the next number, and just return if the result is zero
-    load $ac, [$sp+4]
-    div $ac, ~10
-    sas $ac, ~4
+    div $ba, ~10
     jnz loop_IntTos
 
     ret
@@ -38,21 +36,17 @@ loop_IntTos:
 # [$, *str, num]
 #     +2    +4  +6
 SintTos:
-    load $ba, [$sp+2]
+    load $ds, [$sp+2]
     load $ac, [$sp+4]
-    jns num_len
+    jns sinttos_entry_IntTos
 
-    load $ab, '-'
-    str $ab, $ba
-    inc $ba
-    load $ac, [$sp+4]
+    load $bb, '-'
+    str $bb, $ds
+    inc $ds
     neg $ac
-    # store it in the num arg, because it is re-loaded
-    # after finding the length
-    sas $ac, ~4
     # we can ignore overflow since -MIN_INT wraps to MIN_INT
     # which if interpreted unsigned is actually abs(MIN_INT)
-    jump num_len
+    jump sinttos_entry_IntTos
 
 # [$, *str]
 #     +2
