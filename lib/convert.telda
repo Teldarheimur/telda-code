@@ -29,7 +29,7 @@ loop_IntTos:
     div $ba, ~10
     jnz loop_IntTos
 
-    ret
+    ret 4
 
 # Signed int to string
 # Make sure that str is at least log_10(num) long (7 is max for 16-bit ints (remember the final null-byte in the string))
@@ -100,5 +100,4 @@ loop_to_start_Parse:
 ret_zero:
     xor $ac, $ac
 ret_Parse:
-    sdp
-    ret
+    ret 2

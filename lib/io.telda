@@ -14,22 +14,20 @@ Pc_b:
 # *str a null-terminated string
 Write:
     load $sr, [$sp+2]
-print_Write:
     sdp
 loop_Write:
     sld $ab
-    cmp '\0'
-    jez Return
+    jez return_Write
     int2
     jmp loop_Write
 
 Print:
-    load $sr, [$sp+2]
-    call print_Write
+    push 0, ~[$sp+2]
+    call Write
     load '\n'
     int2
-Return:
-    ret
+return_Write:
+    ret 2
 
 # [$, *dest]
 #     +2
@@ -49,4 +47,4 @@ loop_Getl:
 end_Getl:
     xor $ab, $ab
     str $ab, $ds
-    ret
+    ret 2

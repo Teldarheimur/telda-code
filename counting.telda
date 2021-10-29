@@ -11,8 +11,8 @@ loop:
     push 0, $ac
     push num_str
     call IntTos
+    push num_str
     call Print
-    add $sp, ~4
 
     # i++
     pop $ac

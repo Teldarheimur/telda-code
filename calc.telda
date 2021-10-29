@@ -5,10 +5,11 @@ signed:
 
 set_signed:
     cmp '-'
-    jne Return
+    jne return
     load $ab, 1
     # have to store as u16 because str can't have unmatched sizes
     str $ac, signed
+return:
     ret
 
 start:
@@ -17,6 +18,7 @@ start:
     # set signed to 1, if the first char is -
     load $ab, [buf]
     call set_signed
+    push buf
     call Parse
     push 0, $ac
     push buf
@@ -24,8 +26,8 @@ start:
     # set signed to 1, if the first char is -
     load $ab, [buf]
     call set_signed
+    push buf
     call Parse
-    pop $ds
     pop $ds
     add $ac, $ds
     push 0, $ac
@@ -33,10 +35,12 @@ start:
     load $bb, [signed]
     jnz signed_print
     call IntTos
+    push buf
     call Print
     halt
 signed_print:
     call SintTos
+    push buf
     call Print
     halt
 buf:

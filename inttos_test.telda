@@ -5,18 +5,22 @@ start:
     # dirty to use the start as the string buffer, but these pushs are long enough
     push start
     call IntTos
+    push start
     call Print
     push ~-21
     push start
     call SintTos
+    push start
     call Print
     push ~-32768
     push start
     call SintTos
+    push start
     call Print
     push ~1234
     push start
     call SintTos
+    push start
     call Print
 
     halt

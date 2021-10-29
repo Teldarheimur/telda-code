@@ -11,9 +11,11 @@ Copy:
 loop_Copy:
     # if we're now at the end, let's return
     cmp $sr, $ba
-    jez Return
+    jez return_Copy
     smv
     jump loop_Copy
+return_Copy:
+    ret 6
 
 # [$, len, *dest, val]
 #     +2   +4     +6  +7
@@ -29,12 +31,8 @@ set_:
     sdp
 loop_Set:
     cmp $ds, $ac
-    jez Return
+    jez return_Set
     sst 0, $bb
     jmp loop_Set
-
-# [$, len, *dest]
-#     +2   +4    +6
-Zero:
-    load $bb, 0
-    jmp set_
+return_Set:
+    ret 5

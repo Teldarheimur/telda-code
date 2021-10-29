@@ -5,21 +5,17 @@ start:
     push hello
     push ~4
     call Copy
-    add $sp, ~6
 
     push buf
     call Print
-    add $sp, ~2
 
     push '!'
     push buf
     push ~4
     call Set
-    add $sp, ~5
 
     push buf
     call Print
-    add $sp, ~2
 
     halt
 

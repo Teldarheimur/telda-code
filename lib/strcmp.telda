@@ -53,4 +53,4 @@ ret_zero_loaded:
 
 not_same:
     add $sp, ~1
-    ret
+    ret 4

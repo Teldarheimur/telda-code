@@ -3,12 +3,14 @@ include lib/io.telda, lib/convert.telda
 start:
     push buf
     call Getl
+    push buf
     call Parse
 
     push 0, $ac
     push buf
-
     call IntTos
+
+    push buf
     call Print
 
     halt

@@ -6,6 +6,7 @@ data "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0
 start:
     push line
     call Getl
+    push line
     call Print
 
     halt
