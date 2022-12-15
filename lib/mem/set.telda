@@ -1,0 +1,12 @@
+_zero:
+    or bl, 0, 0
+_set:
+    or y, 0, 0
+    jmp loop_Set_check
+loop_Set:
+    store x, y, bl
+    add y, y, 1
+loop_Set_check:
+    sub 0, a, y
+    jnz loop_Set
+    ret

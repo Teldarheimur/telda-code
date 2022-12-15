@@ -1,0 +1,47 @@
+; Like write but it reads into the argument instead (no checking for size)
+_readLine:
+loop_readLine:
+    add bl, 0, io
+    sub 0, bl, '\n'
+    jez end_readLine
+    store a, 0, bl
+    add a, a, 1
+
+    jump loop_readLine
+end_readLine:
+    add bl, 0, 0
+    store a, 0, bl
+    ret
+
+_readN:
+    add y, 0, 0
+    jmp loop_check_readN
+loop_readN:
+    add bl, 0, io
+    store x, y, bl
+    add y, y, 1
+loop_check_readN:
+    sub 0, y, a
+    jb loop_readN
+
+    ret
+
+_readNLine:
+    sub a, a, 1
+    add y, 0, 0
+    jmp loop_check_readNLine
+loop_readNLine:
+    add bl, 0, io
+    sub 0, bl, '\n'
+    jez end_readNLine
+    store x, y, bl
+    add y, y, 1
+loop_check_readNLine:
+    sub 0, y, a
+    jb loop_check_readNLine
+end_readNLine:
+    add bl, 0, 0
+    store x, 0, bl
+    ; return bytes written
+    load a, x, 1
+    ret

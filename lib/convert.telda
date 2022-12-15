@@ -1,0 +1,19 @@
+; Make sure that str is at least log_10(num) long (6 is max for 16-bit ints (remember the final null-byte in the string))
+; [$, *str, num]
+;     +2    +4  +6
+# a (num), x (str), writes num as a decimal number in x, make sure str has space for log_10(num)+1 bytes (digits + null-terminator)
+.global _uitos
+# a (num), x (str), same as _uitos but handles negative correctly
+.global _sitos
+.include convert/tos.telda
+
+.global _parse
+.include convert/parse.telda
+
+
+; TODO: get these from the desktop
+_sitos:
+    null
+
+_parse:
+    null

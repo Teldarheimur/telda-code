@@ -1,0 +1,13 @@
+.ref _print
+.ref _uitos
+
+.global _start
+_start:
+    add a, 0, 21
+    ; dirty to use the start as the string buffer, but these adds are long enough
+    add x, 0, _start
+    call _uitos
+    add x, 0, _start
+    call _print
+
+    halt

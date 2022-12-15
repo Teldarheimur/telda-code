@@ -1,0 +1,13 @@
+.global _start
+_start:
+    add x, 0, hello
+loop:
+    load al, x, 0
+    or io, al, 0
+    add x, x, 1
+    sub 0, x, hello_end
+    jnz loop
+    halt
+hello:
+    .string Hello World\n
+hello_end:

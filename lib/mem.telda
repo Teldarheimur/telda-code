@@ -1,0 +1,10 @@
+# a (size), x (dest_addr), writes size zeroes to dest_addr
+.global _zero
+# a (size), x (dest_addr), bl (char) writes char to dest_addr size times
+.global _set
+.include mem/set.telda
+
+# a (size), x (dest_addr), b (src_addr) copy x to b with a bytes
+.global _copy
+.include mem/copy.telda
+

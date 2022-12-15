@@ -1,0 +1,30 @@
+; Make sure that str is at least log_10(num) long (6 is max for 16-bit ints (remember the final null-byte in the string))
+; [$, *str, num]
+;     +2    +4  +6
+_uitos:
+    push c
+    or c, 0, a
+    or b, 0, 10
+
+num_len:
+    add x, x, 1
+    div c, 0, c, b
+    sub 0, c, 0
+    jnz num_len
+    ; put the final null byte already (c is zero here, so cl is zero)
+    store x, 0, cl
+
+loop_IntTos:
+    sub x, x, 1
+    ; get the next digit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
+    ; divide by 10 to get the next number, and just return if the result is zero
+    div a, c, a, b
+    add cl, cl, '0'
+    ; then put it into the string and decrement the pointer
+    store x, 0, cl
+
+    sub 0, a, 0
+    jnz loop_IntTos
+
+    pop c
+    ret

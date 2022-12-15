@@ -1,0 +1,30 @@
+error_msg:
+    .string Did not exit successfully: \0
+
+; TODO: set trap vectors
+
+.ref _write
+.ref _print
+.ref _uitos
+
+; setting main as global to capture it
+.ref main
+.global _start
+_start:
+    call main
+    ; keep a (return value) in z for later
+    sub z, a, 0
+    jez done
+    load a, 0, error_msg
+    push buf
+    ; print return value
+    load a, 0, z
+    load x, 0, buf
+    call _uitos
+    load a, 0, buf
+    call _print
+done:
+    halt
+
+buf:
+    .string \0\0\0\0\0\0\0\0

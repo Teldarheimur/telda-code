@@ -1,0 +1,13 @@
+_copy:
+    push c
+    or y, 0, 0
+    jmp loop_Copy_check
+loop_Copy:
+    load cl, b, y
+    store x, y, cl
+    add y, y, 1
+loop_Copy_check:
+    sub 0, a, y
+    jnz loop_Copy
+    pop c
+    ret

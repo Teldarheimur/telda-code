@@ -1,0 +1,18 @@
+
+_write:
+loop_Write:
+    ; load first byte into bl
+    load bl, a, 0
+    ; if this is a zero-byte, we're done
+    sub 0, bl, '\0'
+    jez _write_return
+    ; otherwise, write it out and increment the a address
+    add io, 0, bl
+    add a, a, 1
+    jmp loop_Write
+
+_print:
+    call loop_Write
+    add io, 0, '\n'
+_write_return:
+    ret

@@ -1,0 +1,16 @@
+.global _start
+_start:
+    or io, 0, 'H'
+    or io, 0, 'e'
+    or io, 0, 'l'
+    or io, 0, 'l'
+    or io, 0, 'o'
+    or io, 0, ' '
+    or io, 0, 'w'
+    or io, 0, 'o'
+    or io, 0, 'r'
+    or io, 0, 'l'
+    or io, 0, 'd'
+    or io, 0, '!'
+    or io, 0, '\n'
+    halt

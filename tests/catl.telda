@@ -1,0 +1,15 @@
+line:
+    .string \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0
+
+.ref _readLine
+.ref _print
+
+.global _start
+
+_start:
+    add a, 0, line
+    call _readLine
+    add a, 0, line
+    call _print
+
+    halt

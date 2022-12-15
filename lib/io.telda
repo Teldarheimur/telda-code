@@ -1,0 +1,14 @@
+# a (src_addr), writes until '\0'
+.global _write
+# a (src_addr), write until '\0' and then writes '\n'
+.global _print
+
+.include io/write.telda
+
+# a (dest_addr), read until '\n', does not include '\n', zero-terminates, unsafe
+.global _readLine
+# a (n), x (dest_addr), reads n bytes into dest_addr
+.global _readN
+# a (n), x (dest_addr), like _readLine but atmost n bytes (including null-terminator)
+.global _readNLine
+.include io/read.telda

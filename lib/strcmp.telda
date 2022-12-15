@@ -1,0 +1,30 @@
+.global _strcmp
+
+; a (s1), x (s2)
+; Returns al, 0 if equal
+_strcmp:
+    push z
+    ; moving a int y, since we need to use al (yl does not exist)
+    add y, 0, a
+    ; using z as index starting at 0
+    add z, 0, 0
+
+loop_Strcmp:
+    ; load the current characters
+    load bl, y, z
+    load bh, x, z
+
+    ; compare and return if not equal
+    sub al, bl, bh
+    jne return
+
+    ; check if any is zero (checking one is enough, since they are equal)
+    sub 0, bl, 0
+    jez return
+
+    add z, z, 1
+    jump loop_Strcmp
+
+return:
+    pop z
+    ret

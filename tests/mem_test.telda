@@ -1,0 +1,36 @@
+.ref _zero
+.ref _copy
+.ref _print
+.ref _set
+
+.global _start
+_start:
+    add a, 0, ape
+    call _print
+    add a, 0, ape2
+    call _print
+
+    add a, 0, 6
+    add x, 0, ape
+    call _zero
+    add a, 0, 5
+    add x, 0, ape
+    add bl, 0, 'A'
+    call _set
+    add a, 0, 6
+    add x, 0, ape2
+    add b, 0, ape
+    call _copy
+
+    add a, 0, ape
+    call _print
+    add a, 0, ape2
+    call _print
+
+    halt
+
+ape:
+    .string BBBBB\0
+
+ape2:
+    .string CCCCC\0

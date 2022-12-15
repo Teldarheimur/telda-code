@@ -1,0 +1,10 @@
+.ref _print
+
+hello:
+    .string Hello World!\0
+
+.global _start
+_start:
+    add a, 0, hello
+    call _print
+    halt
