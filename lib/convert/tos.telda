@@ -1,6 +1,18 @@
+# Signed int to string
+# Make sure that str is at least log_10(num) long (7 is max for 16-bit ints (remember the final null-byte in the string))
+_sitos:
+    sub 0, a, 0
+    jb _uitos
+
+    add bl, 0, '-'
+    store x, 0, bl
+    add x, x, 1
+    sub a, 0, a
+    # we can ignore overflow since -MIN_INT wraps to MIN_INT
+    # which if interpreted unsigned is actually abs(MIN_INT)
+    ; jump _uitos # this jump is unnecessary since these are right after each other
+
 ; Make sure that str is at least log_10(num) long (6 is max for 16-bit ints (remember the final null-byte in the string))
-; [$, *str, num]
-;     +2    +4  +6
 _uitos:
     push c
     or c, 0, a

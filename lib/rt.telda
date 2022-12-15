@@ -15,13 +15,13 @@ _start:
     ; keep a (return value) in z for later
     sub z, a, 0
     jez done
-    load a, 0, error_msg
-    push buf
+    add a, 0, error_msg
+    call _write
     ; print return value
-    load a, 0, z
-    load x, 0, buf
+    add a, 0, z
+    add x, 0, buf
     call _uitos
-    load a, 0, buf
+    add a, 0, buf
     call _print
 done:
     halt

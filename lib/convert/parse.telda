@@ -1,1 +1,51 @@
-; need to get this one from the desktop
+_parse:
+    add x, 0, a
+    add y, 0, x
+    # Check for minus
+    # store multiplier in b
+    add b, 0, 1
+    load al, 0, x
+    add x, x, 1
+    sub 0, al, '-'
+    # If it wasn't '-', we'll assume it was a digit
+    # and skip straight into the loop to the end
+    jne wasnotminus_Parse
+    # if it was '-', we set the multiplier
+    # to be negative 1, and store the new string start
+    sub b, 0, 1
+    # Set string start to be after '-'
+    add y, y, 1
+loop_to_end_Parse:
+    load al, 0, x
+    add x, x, 1
+wasnotminus_Parse:
+    sub 0, al, '\0'
+    jne loop_to_end_Parse
+
+    # start a at 0
+    xor a, a, a
+    # go through the array from the lowest digit
+    sub x, x, 2
+loop_to_start_Parse:
+    sub 0, x, y
+    jlt ret_Parse
+    # Make sure upper bits are zero
+    add ch, 0, 0
+    # And read the next digit
+    load cl, 0, x
+    sub x, x, 1
+    sub cl, cl, '0'
+    # Return zero if the digit is invalid
+    sub 0, cl, 9
+    ja ret_zero
+    mul 0, c, c, b
+    add a, a, c
+    ; store 10 in ch
+    add c, 0, 10w
+    mul 0, b, b, c
+    jmp loop_to_start_Parse
+
+ret_zero:
+    xor a, a, a
+ret_Parse:
+    ret
