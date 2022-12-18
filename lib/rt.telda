@@ -1,7 +1,42 @@
+zero:
+    .wide 0
+    .wide 0
+trap_vector:
+    .wide trap_handler
+
+trap_error:
+    .string Trap encountered: \0
+
+trap0:
+    .string explicit halt\0
+
+trap1:
+    .string invalid instruction\0
+
+trap2:
+    .string division by zero\0
+
+trap3:
+    .string return from handler outside handler\0
+
+traps:
+    .wide trap0
+    .wide trap1
+    .wide trap2
+    .wide trap3
+
+trap_handler:
+    ctf
+    seth 0
+    add x, a, traps
+    add a, 0, trap_error
+    call _write
+    load a, 0, x
+    call _print
+    halt
+
 error_msg:
     .string Did not exit successfully: \0
-
-; TODO: set trap vectors
 
 .ref _write
 .ref _print
@@ -11,7 +46,9 @@ error_msg:
 .ref main
 .global _start
 _start:
+    seth 4
     call main
+    seth 0
     ; keep a (return value) in z for later
     sub z, a, 0
     jez done
