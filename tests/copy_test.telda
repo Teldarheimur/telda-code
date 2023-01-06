@@ -1,0 +1,40 @@
+.ref _copy
+.ref _print
+.ref _set
+.ref _zero
+
+.seg text
+.entry
+_start:
+    ldi r6b, 4
+    ldi r7, buf
+    ldi r8, hello
+    call _copy
+
+    ldi r6, buf
+    call _print
+
+    ldi r6b, 4
+    ldi r7, buf
+    ldi r8b, '!' 
+    call _set
+
+    ldi r6, buf
+    call _print
+
+    ldi r6b, 4
+    ldi r7, hello
+    ldi r8b, 3
+    add r7, r7, r8
+    call _zero
+
+    ldi r6, hello
+    call _print
+
+    halt
+
+.seg data
+hello:
+    .string hello\0
+buf:
+    .string \0\0\0\0\0\0\0\0\0\0\0\0\0\0

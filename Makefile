@@ -1,13 +1,13 @@
 .PHONY: clean all
 
-FLAGS=-e _start
+FLAGS=-e
 tlf=tl $(FLAGS)
 
-all: tests/hello.tb tests/hello_direct.tb tests/call_hello.tb tests/catl.tb tests/mem_test.tb tests/main_hello.tb tests/password.tb tests/intos_test.tb
+all: tests/hello.tb tests/hello_direct.tb tests/call_hello.tb tests/catl.tb tests/mem_test.tb tests/copy_test.tb tests/password.tb tests/intos_test.tb tests/parse_test.tb tests/main_hello.tb
 	
 
-lib/std.to: lib/rt.to lib/io.to lib/mem.to lib/convert.to lib/strcmp.to
-	tl -r -o $@ $^
+lib/std.to: lib/io.to lib/mem.to lib/rt.to lib/convert.to lib/strcmp.to
+	tl -o $@ $^
 
 lib/%.to: lib/%.telda lib/%/*.telda
 	tc $<
@@ -33,11 +33,17 @@ tests/catl.tb: lib/io.to tests/catl.to
 tests/mem_test.tb: lib/io.to lib/mem.to tests/mem_test.to
 	$(tlf) -o $@ $^
 
-tests/main_hello.tb: lib/std.to tests/main_hello.to
+tests/copy_test.tb: lib/io.to lib/mem.to tests/copy_test.to
 	$(tlf) -o $@ $^
 
-tests/password.tb: lib/io.to tests/password.to lib/strcmp.to
+tests/password.tb: lib/io.to lib/strcmp.to tests/password.to
 	$(tlf) -o $@ $^
 
 tests/intos_test.tb: lib/convert.to lib/io.to tests/intos_test.to
+	$(tlf) -o $@ $^
+
+tests/parse_test.tb: lib/convert.to lib/io.to tests/parse_test.to
+	$(tlf) -o $@ $^
+
+tests/main_hello.tb: lib/std.to tests/main_hello.to
 	$(tlf) -o $@ $^

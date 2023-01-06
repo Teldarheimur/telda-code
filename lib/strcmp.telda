@@ -1,30 +1,28 @@
 .global _strcmp
 
-; a (s1), x (s2)
-; Returns al, 0 if equal
+.seg text
+; r6 (s1), r7 (s2)
+; Returns r1l, 0 if equal
 _strcmp:
-    push z
-    ; moving a int y, since we need to use al (yl does not exist)
-    add y, 0, a
-    ; using z as index starting at 0
-    add z, 0, 0
+    ; using r8 as index starting at 0
+    ldi r8b, 0
+    ldi r9b, 1
 
 loop_Strcmp:
     ; load the current characters
-    load bl, y, z
-    load bh, x, z
+    load r1l, r6, r8
+    load r1h, r7, r8
 
     ; compare and return if not equal
-    sub al, bl, bh
+    sub r1l, r1l, r1h
     jne return
 
     ; check if any is zero (checking one is enough, since they are equal)
-    sub 0, bl, 0
+    sub r0b, r1h, r0b
     jez return
 
-    add z, z, 1
+    add r8, r8, r9
     jump loop_Strcmp
 
 return:
-    pop z
     ret

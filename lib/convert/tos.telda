@@ -1,42 +1,47 @@
 # Signed int to string
 # Make sure that str is at least log_10(num) long (7 is max for 16-bit ints (remember the final null-byte in the string))
+.seg text
 _sitos:
-    sub 0, a, 0
+    sub r0, r6, r0
     jb _uitos
 
-    add bl, 0, '-'
-    store x, 0, bl
-    add x, x, 1
-    sub a, 0, a
+    # bl = r1l
+    ldi r1l, '-'
+    store r7, r0, r1l
+    ldi r8b, 1
+    add r7, r7, r8
+    sub r6, r0, r6
     # we can ignore overflow since -MIN_INT wraps to MIN_INT
     # which if interpreted unsigned is actually abs(MIN_INT)
     ; jump _uitos # this jump is unnecessary since these are right after each other
 
 ; Make sure that str is at least log_10(num) long (6 is max for 16-bit ints (remember the final null-byte in the string))
 _uitos:
-    push c
-    or c, 0, a
-    or b, 0, 10
+    or r8, r6, r0
 
 num_len:
-    add x, x, 1
-    div c, 0, c, b
-    sub 0, c, 0
+    ldi r9b, 1
+    add r7, r7, r9
+    ldi r9b, 10
+    div r8, r0, r8, r9
+    sub r0, r8, r0
     jnz num_len
-    ; put the final null byte already (c is zero here, so cl is zero)
-    store x, 0, cl
+    ; put the final null byte already
+    store r7, r0, r0
 
 loop_IntTos:
-    sub x, x, 1
+    ldi r9b, 1
+    sub r7, r7, r9
     ; get the next digit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
     ; divide by 10 to get the next number, and just return if the result is zero
-    div a, c, a, b
-    add cl, cl, '0'
+    ldi r9b, 10
+    div r6, r8, r6, r9
+    ldi r9b, '0'
+    add r9b, r8b, r9b
     ; then put it into the string and decrement the pointer
-    store x, 0, cl
+    store r7, r0, r9b
 
-    sub 0, a, 0
+    sub r0, r6, r0
     jnz loop_IntTos
 
-    pop c
     ret

@@ -1,15 +1,22 @@
+.seg data
 line:
     .string \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0
 
 .ref _readLine
 .ref _print
 
-.global _start
+.seg rodata
+    write_smth:
+    .string Write something:\0
 
+.seg text
 _start:
-    add a, 0, line
+.entry
+    ldi r6, write_smth
+    call _print
+    ldi r6, line
     call _readLine
-    add a, 0, line
+    ldi r6, line
     call _print
 
     halt

@@ -1,40 +1,76 @@
-zero:
-    .wide 0
-    .wide 0
-trap_vector:
-    .wide trap_handler
+; TODO: make this work again
 
+.seg rodata
 trap_error:
     .string Trap encountered: \0
 
-trap0:
-    .string explicit halt\0
-
-trap1:
+trap_invalid:
     .string invalid instruction\0
 
-trap2:
+trap_syscall:
+    .string syscall not supported, no OS\0
+
+trap_zerodiv:
     .string division by zero\0
 
-trap3:
-    .string return from handler outside handler\0
+trap_halt:
+    .string explicit halt\0
 
-traps:
-    .wide trap0
-    .wide trap1
-    .wide trap2
-    .wide trap3
+trap_illegal:
+    .string illegal operation\0
 
+trap_unknown:
+    .string unknown\0
+
+.seg text
 trap_handler:
     ctf
-    seth 0
-    add x, a, traps
-    add a, 0, trap_error
+; turn of trap handler, because if it fails inside this trap handler, then we're F'd and should just crash
+    ldi rh, 0
+test_invalid:
+    ldi r2, 0
+    sub r0, r1, r2
+    jnz test_syscall
+    ldi r2, trap_invalid
+    jmp print_error
+test_syscall:
+    ldi r2, 5
+    sub r0, r1, r2
+    jnz test_zerodiv
+    ldi r2, trap_syscall
+    jmp print_error
+test_zerodiv:
+    ldi r2, 8
+    sub r0, r1, r2
+    jnz test_halt
+    ldi r2, trap_zerodiv
+    jmp print_error
+test_halt:
+    ldi r2, 0xa
+    sub r0, r1, r2
+    jnz unknown
+    ldi r2, trap_halt
+    jmp print_error
+test_illegal:
+    ldi r2, 0x1f
+    sub r0, r1, r2
+    ja unknown
+    ldi r2, 0x10
+    sub r0, r1, r2
+    jlt unknown
+    ldi r2, trap_illegal
+    jmp print_error
+unknown:
+    ldi r2, trap_unknown
+
+print_error:
+    ldi r6, trap_error
     call _write
-    load a, 0, x
+    or r6, r2, r0
     call _print
     halt
 
+.seg rodata
 error_msg:
     .string Did not exit successfully: \0
 
@@ -42,26 +78,27 @@ error_msg:
 .ref _print
 .ref _uitos
 
-; setting main as global to capture it
-.ref main
-.global _start
+.ref _main
+.seg text
+.entry
 _start:
-    seth 4
-    call main
-    seth 0
-    ; keep a (return value) in z for later
-    sub z, a, 0
+    ldi rh, trap_handler
+    call _main
+    ldi rh, 0
+    ; keep r1 (return value) in r2 for later
+    sub r2, r1, r0
     jez done
-    add a, 0, error_msg
+    ldi r6, error_msg
     call _write
     ; print return value
-    add a, 0, z
-    add x, 0, buf
+    or r6, r2, r0
+    ldi r7, buf
     call _uitos
-    add a, 0, buf
+    ldi r6, buf
     call _print
 done:
     halt
 
+.seg data
 buf:
     .string \0\0\0\0\0\0\0\0

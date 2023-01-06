@@ -1,10 +1,11 @@
 .ref _print
 
+.seg rodata
 hello:
     .string Hello World!\0
 
-.global _start
-_start:
-    add a, 0, hello
+.seg text
+.entry
+    ldi r6, hello
     call _print
     halt

@@ -1,13 +1,14 @@
+.seg text
 _copy:
-    push c
-    or y, 0, 0
+    ldi r9b, 0
+    ldi r1h, 0
     jmp loop_Copy_check
 loop_Copy:
-    load cl, b, y
-    store x, y, cl
-    add y, y, 1
+    load r1l, r8, r9
+    store r7, r9, r1l
+    ldi r1l, 1
+    add r9, r9, r1
 loop_Copy_check:
-    sub 0, a, y
+    sub r0, r6, r9
     jnz loop_Copy
-    pop c
     ret

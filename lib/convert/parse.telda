@@ -1,51 +1,58 @@
+.seg text
 _parse:
-    add x, 0, a
-    add y, 0, x
+    push r10
+    or r7, r0, r6
     # Check for minus
-    # store multiplier in b
-    add b, 0, 1
-    load al, 0, x
-    add x, x, 1
-    sub 0, al, '-'
+    # store multiplier in r8
+    ldi r8, 1
+    load r1l, r0, r6
+    add r6, r6, r8
+    ldi r9b, '-'
+    sub r0b, r1l, r9b
     # If it wasn't '-', we'll assume it was a digit
     # and skip straight into the loop to the end
     jne wasnotminus_Parse
+    # Set string start to be after '-'
+    add r7, r7, r8
     # if it was '-', we set the multiplier
     # to be negative 1, and store the new string start
-    sub b, 0, 1
-    # Set string start to be after '-'
-    add y, y, 1
+    ldi r8, -1
 loop_to_end_Parse:
-    load al, 0, x
-    add x, x, 1
+    load r1l, r0, r6
+    ldi r9, 1
+    add r6, r6, r9
 wasnotminus_Parse:
-    sub 0, al, '\0'
+    ldi r9b, '\0'
+    sub r0b, r1l, r9b
     jne loop_to_end_Parse
 
-    # start a at 0
-    xor a, a, a
+    # start r1 at 0
+    xor r1, r1, r1
     # go through the array from the lowest digit
-    sub x, x, 2
+    ldi r9, 2
+    sub r6, r6, r9
 loop_to_start_Parse:
-    sub 0, x, y
+    sub r0, r6, r7
     jlt ret_Parse
-    # Make sure upper bits are zero
-    add ch, 0, 0
     # And read the next digit
-    load cl, 0, x
-    sub x, x, 1
-    sub cl, cl, '0'
+    load r10b, r0, r6
+    ldi r9, 1
+    sub r6, r6, r9
+    ldi r9b, '0'
+    sub r10b, r10b, r9b
     # Return zero if the digit is invalid
-    sub 0, cl, 9
+    ldi r9b, 9
+    sub r0b, r10b, r9b
     ja ret_zero
-    mul 0, c, c, b
-    add a, a, c
+    mul r0, r10, r10, r8
+    add r1, r1, r10
     ; store 10 in ch
-    add c, 0, 10w
-    mul 0, b, b, c
+    ldi r10b, 10
+    mul r0, r8, r8, r10
     jmp loop_to_start_Parse
 
 ret_zero:
-    xor a, a, a
+    ldi r1, 0
 ret_Parse:
+    pop r10
     ret

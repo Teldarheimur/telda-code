@@ -1,13 +1,14 @@
 .ref _print
 .ref _uitos
 
-.global _start
+.seg text
+.entry
 _start:
-    add a, 0, 21
+    ldi r6b, 21
     ; dirty to use the start as the string buffer, but these adds are long enough
-    add x, 0, _start
+    ldi r7, _start
     call _uitos
-    add a, 0, _start
+    ldi r6, _start
     call _print
 
     halt

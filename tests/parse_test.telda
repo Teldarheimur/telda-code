@@ -1,0 +1,40 @@
+.ref _readLine
+.ref _parse
+.ref _uitos
+.ref _print
+.ref _write
+
+.seg text
+_start:
+.entry
+    ldi r6, prompt
+    call _write
+
+    ldi r6, buf
+    call _readLine
+    ldi r6, buf
+    call _parse
+    or r2, r0, r1
+
+    ldi r6, answer
+    call _write
+
+    or r6, r0, r2
+    ldi r7, buf
+    call _uitos
+
+    ldi r6, buf
+    call _print
+
+    halt
+
+.seg rodata
+prompt:
+    .string Write a number for me to repeat:\n\0
+answer:
+    .string I will now repeat this very cool number:\n\0
+
+
+.seg heap
+buf:
+.string \0

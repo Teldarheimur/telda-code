@@ -3,32 +3,33 @@
 .ref _print
 .ref _set
 
-.global _start
-_start:
-    add a, 0, ape
+.seg text
+.entry
+    ldi r6, ape
     call _print
-    add a, 0, ape2
+    ldi r6, ape2
     call _print
 
-    add a, 0, 6
-    add x, 0, ape
+    ldi r6, 5
+    ldi r7, ape
     call _zero
-    add a, 0, 5
-    add x, 0, ape
-    add bl, 0, 'A'
+    ldi r6, 4
+    ldi r7, ape
+    ldi r8b, 'A'
     call _set
-    add a, 0, 6
-    add x, 0, ape2
-    add b, 0, ape
+    ldi r6, 5
+    ldi r7, ape2
+    ldi r8, ape
     call _copy
 
-    add a, 0, ape
+    ldi r6, ape
     call _print
-    add a, 0, ape2
+    ldi r6, ape2
     call _print
 
     halt
 
+.seg data
 ape:
     .string BBBBB\0
 

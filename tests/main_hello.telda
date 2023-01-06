@@ -1,10 +1,17 @@
 .ref _print
 
+.seg rodata
 hello:
     .string Hello, World!!\0
 
-.global main
-main:
-    add a, 0, hello
+.global _main
+.seg text
+_main:
+    push rl
+    ldi r6, hello
     call _print
+
+    ; zero r1 to return sucessfully
+    xor r1, r1, r1
+    pop rl
     ret

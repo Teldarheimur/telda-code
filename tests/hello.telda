@@ -1,13 +1,16 @@
-.global _start
-_start:
-    add x, 0, hello
+.seg text
+.entry
+    ldi r6, hello
+    ldi r7, hello_end
+    ldi r8b, 1
 loop:
-    load al, x, 0
-    or io, al, 0
-    add x, x, 1
-    sub 0, x, hello_end
+    load r1l, r6, r0
+    store r0, 0xffff, r1l
+    add r6, r6, r8
+    sub r0, r6, r7
     jnz loop
     halt
+
 hello:
     .string Hello World\n
 hello_end:

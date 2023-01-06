@@ -1,12 +1,15 @@
+.seg text
 _zero:
-    or bl, 0, 0
+    ldi r8b, 0
 _set:
-    or y, 0, 0
+    ldi r1l, 1
+    ldi r1h, 0
+    ldi r9b, 0
     jmp loop_Set_check
 loop_Set:
-    store x, y, bl
-    add y, y, 1
+    store r7, r9, r8b
+    add r9, r9, r1
 loop_Set_check:
-    sub 0, a, y
+    sub r0, r6, r9
     jnz loop_Set
     ret

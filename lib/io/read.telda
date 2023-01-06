@@ -1,47 +1,54 @@
+.seg text
 ; Like write but it reads into the argument instead (no checking for size)
 _readLine:
+    ldi r7b, '\n'
+    ldi r8b, 1
 loop_readLine:
-    add bl, 0, io
-    sub 0, bl, '\n'
+    load r1l, r0, 0xffff
+    sub r0b, r1l, r7b
     jez end_readLine
-    store a, 0, bl
-    add a, a, 1
+    store r6, r0, r1l
+    add r6, r6, r8
 
     jump loop_readLine
 end_readLine:
-    add bl, 0, 0
-    store a, 0, bl
+    store r6, r0, r0b
     ret
 
 _readN:
-    add y, 0, 0
+    ldi r8b, 0
+    ldi r9b, 1
     jmp loop_check_readN
 loop_readN:
-    add bl, 0, io
-    store x, y, bl
-    add y, y, 1
+    load r1l, r0, 0xffff
+    store r7, r8, r1l
+    add r8, r8, r9
 loop_check_readN:
-    sub 0, y, a
+    sub r0, r8, r6
     jb loop_readN
 
     ret
 
 _readNLine:
-    sub a, a, 1
-    add y, 0, 0
+    ldi r9b, 1
+    sub r6, r6, r9
+    ldi r8b, 0
     jmp loop_check_readNLine
 loop_readNLine:
-    add bl, 0, io
-    sub 0, bl, '\n'
+    load r1l, r0, 0xffff
+    ldi r9b, '\n'
+    sub r0b, r1l, r9b
     jez end_readNLine
-    store x, y, bl
-    add y, y, 1
+    store r7, r8, r1l
+    ldi r9b, 1
+    add r8, r8, r9
 loop_check_readNLine:
-    sub 0, y, a
+    sub r0, r8, r6
     jb loop_check_readNLine
 end_readNLine:
-    add bl, 0, 0
-    store x, 0, bl
+    ldi r1l, 0
+    store r7, r8, r1l
     ; return bytes written
-    load a, x, 1
+    ldi r9b, 1
+    add r1, r8, r9
     ret
