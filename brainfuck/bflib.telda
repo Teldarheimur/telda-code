@@ -1,0 +1,87 @@
+; jump table = 0x7ff0
+
+.seg text
+; r7 = source
+; r8 = length
+write_n:
+    ldi r9b, 0
+    ldi r10b, 1
+; update length of program
+    add rp, rp, r8
+loop_write_n:
+    sub r0, r9, r8
+    jez ret_write_n
+    load r1h, r7, r9
+    store r0, 0xffff, r1h
+    add r9, r9, r10
+    jmp loop_write_n
+ret_write_n:
+    ret
+
+.seg rodata
+; len =25
+header_start:
+    .string álvur2\n_entry\0\x03\0\x20\0\0_seg\0
+; len =2
+header_code_size:
+    ; size
+    .wide 0x040a
+; len =3
+header_end:
+    ; offset
+    .wide 0
+    ; type (0x20 = text)
+    .byte 0x20
+
+; len =14
+bf_start:
+    ; cell pointer
+    ldi r6b, 0
+    ; cells location
+    ldi r7, 0xef00
+
+    ; stdio port
+    ldi r9, 0xffff
+    ; a one
+    ldi r10b, 1b
+
+bf_end:
+    halt
+
+; [
+bf_loop_start:
+    load r1l, r7, r6
+    sub r0b, r1l, r0b
+    ; to relevant bf_loop_end+3 (offset bf_loop_start+7)
+    jez 0xffaf
+; ]
+bf_loop_end:
+    ; to relevant bf_loop_start (offset bf_loop_end+1)
+    jmp 0xffaf
+
+; +
+bf_plus:
+    load r1l, r7, r6
+    add r1l, r1l, r10b
+    store r7, r6, r1l
+; -
+bf_minus:
+    load r1l, r7, r6
+    sub r1l, r1l, r10b
+    store r7, r6, r1l
+; <
+bf_decp:
+    sub r6, r6, r10
+; >
+bf_incp:
+    add r6, r6, r10
+; ,
+bf_in:
+    load r1l, r0, r9
+    store r7, r6, r1l
+; .
+bf_out:
+    load r1l, r7, r6
+    store r9, r0, r1l
+
+
