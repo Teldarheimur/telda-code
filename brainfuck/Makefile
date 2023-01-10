@@ -1,10 +1,10 @@
 .PHONY: all
 
-all: sierpinksi.to q.to
+all: sierpinski.to q.to
 	
 
-sierpinksi.to: sierpinksi.bf bf.tb
-	./bf.tb < sierpinksi.bf > sierpinksi.to
+sierpinski.to: sierpinski.bf bf.tb
+	./bf.tb < sierpinski.bf > sierpinski.to
 
 q.to: q.bf bf.tb
 	./bf.tb < q.bf > q.to
@@ -15,3 +15,4 @@ bf.tb: bf.to
 
 bf.to: bf.telda bflib.telda
 	tc bf.telda
+

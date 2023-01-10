@@ -8,4 +8,4 @@ http://brainfuck.org/]
 ]
 [Shows an ASCII representation of the Sierpinski triangle
 (iteration 5).]
-#
+#!
