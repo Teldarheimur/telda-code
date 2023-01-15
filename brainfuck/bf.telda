@@ -19,7 +19,7 @@ compiler:
     ; r7 arg1; r8 arg2
 
     ; used to keep track of where the program currently is
-    ldi rp, 14
+    ldi r10, 14
     ; location to load code into
     ldi rf, loaded_code
 
@@ -36,37 +36,37 @@ is_+:
     sub r0b, r1l, r2l
     jnz is_-
     ldi r8b, 9
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_-:
     sub r0b, r1l, r2h
     jnz is_<
     ldi r8b, 9
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_<:
     sub r0b, r1l, r3l
     jnz is_>
     ldi r8b, 3
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_>:
     sub r0b, r1l, r3h
     jnz is_comma
     ldi r8b, 3
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_comma:
     sub r0b, r1l, r4l
     jnz is_.
     ldi r8b, 6
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_.:
     sub r0b, r1l, r4h
     jnz is_[
     ldi r8b, 6
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_[:
     sub r0b, r1l, r5l
@@ -75,15 +75,15 @@ is_[:
     ldi r8b, 2
     add r9, r9, r8
     ldi r8b, 9
-    add rp, rp, r8
+    add r10, r10, r8
     jmp save_byte
 is_]:
     sub r0b, r1l, r5h
     jnz read_code
     ldi r8b, 4
-    add rp, rp, r8
+    add r10, r10, r8
     pop r8
-    store r8, r0, rp
+    store r8, r0, r10
     ; jmp save_byte
 save_byte:
     store rf, r0, r1l
@@ -92,15 +92,13 @@ save_byte:
 
     jmp read_code
 
-; TODO: fix [ and ], dunno what's wrong
-
 compile_step:
     store rf, r0, r6b
     ldi rf, loaded_code
 
-    ldi r10b, 4
-    ; load old rp + 1 (for halt) and + 3 (for offset and segment type) into r6 (otherwise it gets overwritten
-    add r6, rp, r10
+    ldi r8b, 4
+    ; load old r10 + 1 (for halt) and + 3 (for offset and segment type) into r6 (otherwise it gets overwritten
+    add r6, r10, r8
 
     ldi r7, header_start
     ldi r8b, 25
@@ -113,7 +111,7 @@ compile_step:
     call write_n
 
     ldi r6, 0x7ff0
-    ldi rp, 14
+    ldi r5, 14
 
 load_and_write_byte:
     ; ret for write_n
@@ -167,22 +165,24 @@ check_out:
     ldi r8b, 6
     jmp write_n
 check_loop_start:
-    sub r0b, r1l, r5l
+    ldi r1h, '['
+    sub r0b, r1l, r1h
     jnz check_loop_end
 
-    push rp
+    push r5
     ldi r7, bf_loop_start
     ldi r8b, 7
     call write_n
     ldi r8b, 2
     load r1, r0, r6
     add r6, r6, r8
-    add rp, rp, r8
+    add r5, r5, r8
     store r0, 0xfffe, r1
 
     jmp load_and_write_byte
 check_loop_end:
-    sub r0b, r1l, r5h
+    ldi r1h, ']'
+    sub r0b, r1l, r1h
     jnz compiler_end
 
     ldi r7, bf_loop_end
@@ -192,7 +192,7 @@ check_loop_end:
     pop r7
     store r0, 0xfffe, r7
     ldi r8b, 2
-    add rp, rp, r8
+    add r5, r5, r8
 
     jmp load_and_write_byte
 

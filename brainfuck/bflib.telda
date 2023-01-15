@@ -7,7 +7,7 @@ write_n:
     ldi r9b, 0
     ldi r10b, 1
 ; update length of program
-    add rp, rp, r8
+    add r5, r5, r8
 loop_write_n:
     sub r0, r9, r8
     jez ret_write_n
