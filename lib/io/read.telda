@@ -1,10 +1,19 @@
 .seg text
+# r1 has read byte
+; TODO: perhaps make this a macro instead 
+sysread:
+    ldi r1, 3
+    syscall
+    ret
+
 ; Like write but it reads into the argument instead (no checking for size)
 _readLine:
+    push rl
+
     ldi r7b, '\n'
     ldi r8b, 1
 loop_readLine:
-    load r1l, r0, 0xffff
+    call sysread
     sub r0b, r1l, r7b
     jez end_readLine
     store r6, r0, r1l
@@ -13,29 +22,36 @@ loop_readLine:
     jump loop_readLine
 end_readLine:
     store r6, r0, r0b
+
+    pop rl
     ret
 
 _readN:
+    push rl
+
     ldi r8b, 0
     ldi r9b, 1
     jmp loop_check_readN
 loop_readN:
-    load r1l, r0, 0xffff
+    call sysread
     store r7, r8, r1l
     add r8, r8, r9
 loop_check_readN:
     sub r0, r8, r6
     jb loop_readN
 
+    pop rl
     ret
 
 _readNLine:
+    push rl
+
     ldi r9b, 1
     sub r6, r6, r9
     ldi r8b, 0
     jmp loop_check_readNLine
 loop_readNLine:
-    load r1l, r0, 0xffff
+    call sysread
     ldi r9b, '\n'
     sub r0b, r1l, r9b
     jez end_readNLine
@@ -51,4 +67,5 @@ end_readNLine:
     ; return bytes written
     ldi r9b, 1
     add r1, r8, r9
+    pop rl
     ret

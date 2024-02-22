@@ -24,9 +24,6 @@ trap_unknown:
 
 .seg text
 trap_handler:
-    ctf
-; turn of trap handler, because if it fails inside this trap handler, then we're F'd and should just crash
-    ldi rh, 0
 test_invalid:
     ldi r2, 0
     sub r0, r1, r2
@@ -82,10 +79,16 @@ error_msg:
 .seg text
 .entry
 _start:
-    ldi rh, trap_handler
+    ldi r1, 15
+    ldi r2, trap_handler
+    syscall
     call _main
-    ldi rh, 0
+    push r1
+    ldi r1, 15
+    ldi r2, 0
+    syscall
     ; keep r1 (return value) in r2 for later
+    pop r1
     sub r2, r1, r0
     jez done
     ldi r6, error_msg

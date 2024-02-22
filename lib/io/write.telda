@@ -1,23 +1,34 @@
 .seg text
+# r2l = byte_to_write, clobbers r1
+; syswrite:
+;    ldi r1, 4
+;    syscall
+;     ret
+
 _write:
+    push r2l
     ldi r7b, '\0'
     ldi r8b, 1
 loop_Write:
-    ; load first byte into r1l
-    load r1l, r6, r0
+    ; load first byte into r2l
+    load r2l, r6, r0
     ; if this is a zero-byte, we're done
-    sub r0b, r1l, r7b
+    sub r0b, r2l, r7b
     jez _write_return
     ; otherwise, write it out and increment the r6 address
-    store r0, 0xffff, r1l
+    ldi r1, 4
+    syscall
     add r6, r6, r8
     jmp loop_Write
 
 _print:
     push rl
     call _write
-    ldi r1l, '\n'
-    store r0, 0xffff, r1l
     pop rl
+    push r2l
+    ldi r2l, '\n'
+    ldi r1, 4
+    syscall
 _write_return:
+    pop r2l
     ret

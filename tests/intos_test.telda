@@ -1,14 +1,17 @@
 .ref _print
 .ref _uitos
 
+.seg data
+buf:
+    .string 65536
+
 .seg text
 .entry
 _start:
     ldi r6b, 21
-    ; dirty to use the start as the string buffer, but these adds are long enough
-    ldi r7, _start
+    ldi r7, buf
     call _uitos
-    ldi r6, _start
+    ldi r6, buf
     call _print
 
     halt

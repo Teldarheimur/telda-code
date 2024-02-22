@@ -1,0 +1,47 @@
+.ref Malloc
+.ref Copy
+.ref Print
+.ref Free
+
+.global main
+
+main:
+    push 9w
+    call Malloc
+    ; *p1, $+2
+    push x
+
+    push 9w
+    call Malloc
+    ; *p2, $+0
+    push x
+
+    load x, s, 2
+    push x
+    push piss
+    push 9w
+    call Copy
+
+    load x, s, 0
+    push x
+    push shit
+    push 9w
+    call Copy
+
+    load x, s, 2
+    push x
+    call Print
+
+    load x, s, 0
+    push x
+    call Print
+
+    call Free
+    call Free
+
+    ret
+
+piss:
+    .string gobshite\0
+shit:
+    .string shitfuck\0

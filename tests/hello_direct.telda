@@ -1,29 +1,30 @@
 .seg text
 .entry
-    ldi r1l, 'H'
-    store r0, 0xffff, r1l
-    ldi r1l, 'e'
-    store r0, 0xffff, r1l
-    ldi r1l, 'l'
-    store r0, 0xffff, r1l
-    ldi r1l, 'l'
-    store r0, 0xffff, r1l
-    ldi r1l, 'o'
-    store r0, 0xffff, r1l
-    ldi r1l, ' '
-    store r0, 0xffff, r1l
-    ldi r1l, 'w'
-    store r0, 0xffff, r1l
-    ldi r1l, 'o'
-    store r0, 0xffff, r1l
-    ldi r1l, 'r'
-    store r0, 0xffff, r1l
-    ldi r1l, 'l'
-    store r0, 0xffff, r1l
-    ldi r1l, 'd'
-    store r0, 0xffff, r1l
-    ldi r1l, '!'
-    store r0, 0xffff, r1l
-    ldi r1l, '\n'
-    store r0, 0xffff, r1l
+    ldi r1, 4
+    ldi r2l, 'H'
+    syscall
+    ldi r2l, 'e'
+    syscall
+    ldi r2l, 'l'
+    syscall
+    ldi r2l, 'l'
+    syscall
+    ldi r2l, 'o'
+    syscall
+    ldi r2l, ' '
+    syscall
+    ldi r2l, 'w'
+    syscall
+    ldi r2l, 'o'
+    syscall
+    ldi r2l, 'r'
+    syscall
+    ldi r2l, 'l'
+    syscall
+    ldi r2l, 'd'
+    syscall
+    ldi r2l, '!'
+    syscall
+    ldi r2l, '\n'
+    syscall
     halt
