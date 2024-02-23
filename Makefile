@@ -8,46 +8,19 @@ all: tests/hello.tb tests/hello_direct.tb tests/call_hello.tb tests/catl.tb test
 strip:
 	tstrip -a -- tests/*.tb
 
-lib/std.to: lib/io.to lib/mem.to lib/rt.to lib/convert.to lib/strcmp.to
-	tl -o $@ $^
-
 lib/%.to: lib/%.telda lib/%/*.telda
 	tc $<
+	tstrip $@
 %.to: %.telda
 	tc $^
+lib/std.savn: lib/io.to lib/mem.to lib/convert.to lib/strcmp.to lib/rt.to
+	tar -o $@ $^
 
 clean:
-	rm -v tests/*.to lib/*.to tests/*.tb
+	rm -v tests/*.to lib/*.to tests/*.tb lib/std.savn
 
-tests/hello.tb: tests/hello.to
-	$(tlf) -o $@ $^
+tests/%.tb: lib/std.savn tests/%.to
+	$(tlf) -o $@ -l $^
 
-tests/hello_direct.tb: tests/hello_direct.to
-	$(tlf) -o $@ $^
-
-tests/call_hello.tb: lib/io.to tests/call_hello.to
-	$(tlf) -o $@ $^
-
-tests/catl.tb: lib/io.to tests/catl.to
-	$(tlf) -o $@ $^
-
-tests/mem_test.tb: lib/io.to lib/mem.to tests/mem_test.to
-	$(tlf) -o $@ $^
-
-tests/copy_test.tb: lib/io.to lib/mem.to tests/copy_test.to
-	$(tlf) -o $@ $^
-
-tests/password.tb: lib/io.to lib/strcmp.to tests/password.to
-	$(tlf) -o $@ $^
-
-tests/password_compact.tb: lib/io.to lib/strcmp.to tests/password.to
-	$(tlf) -o $@ -A2 $^
-
-tests/intos_test.tb: lib/convert.to lib/io.to tests/intos_test.to
-	$(tlf) -o $@ $^
-
-tests/parse_test.tb: lib/convert.to lib/io.to tests/parse_test.to
-	$(tlf) -o $@ $^
-
-tests/main_hello.tb: lib/std.to tests/main_hello.to
-	$(tlf) -o $@ $^
+tests/password_compact.tb: lib/std.savn tests/password.to
+	$(tlf) -o $@ -A2 -l $^

@@ -5,7 +5,7 @@ Callee cleans up the stack
 ## Return-value
 
 Return value is stored in `r1` or in the beginning of stack space
-which has to allocated by the caller. Esentially one of the stack arguments will get overwritten
+which has to be allocated by the caller. Essentially one of the stack arguments will get overwritten
 with the return value.
 
 ## Caller-saves
