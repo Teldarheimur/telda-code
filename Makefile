@@ -13,7 +13,7 @@ lib/%.to: lib/%.telda $(wildcard lib/%/*.telda)
 	tstrip $@
 %.to: %.telda
 	tasm $^
-lib/std.savn: lib/io.to lib/mem.to lib/convert.to lib/strcmp.to lib/rt.to
+lib/std.savn: lib/io.to lib/mem.to lib/convert.to lib/strcmp.to lib/edd_interface.to lib/rt.to
 	tar -o $@ $^
 
 clean:

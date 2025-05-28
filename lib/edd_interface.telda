@@ -1,0 +1,99 @@
+# r6 (src_addr), r7 (len)
+.global puts
+# r6 (n)
+.global puti32
+# r6 (n)
+.global putu32
+# r6 (n)
+.global puti16
+# r6 (n)
+.global putu16
+# r6 (n)
+.global puti8
+# r6 (n)
+.global putu8
+
+.ref uitos
+.ref sitos
+.ref write
+
+.seg data
+buf:
+    .string \0\0\0\0\0\0\0\0
+.seg rodata
+start:
+    .string Panic at \0
+colon:
+    .string : \0
+newline:
+    .string \n\0
+
+.seg text
+puts:
+    push r2l
+    ldi r8b, 0
+    ldi r9b, 1
+loop_puts:
+    ; load byte into r2l and write it to out pin
+    load r2l, r6, r8
+    ldi r1, 4
+    syscall
+    ; increment r8
+    add r8, r8, r9
+    ; check if r8 if it's < length
+    sub r0, r8, r7
+    jlt loop_puts
+    pop r2l
+    ret
+
+write_buf:
+    ldi r6, buf
+    call write
+    pop rl
+    ret
+
+putu8:
+    ; assume that r6 was loaded into with zero-extension
+putu32:
+putu16:
+    push rl
+    ldi r7, buf
+    call uitos
+    jmp write_buf
+
+puti8:
+    # if n > 0x7f:
+    #    n |= 0xff00;
+    ldi r7b, 0x7f
+    sub r0b, r6b, r7b
+    jle puti16
+    ; sign extend
+    ldi r7, 0xff00
+    or r6, r6, r7
+puti32:
+puti16:
+    push rl
+    ldi r7, buf
+    call sitos
+    jmp write_buf
+
+.global panic
+# r6 (source), r7 (source length), r8 (message), r9 (message length)
+panic:
+    push r8
+    push r9
+    push r6
+    push r7
+    ldi r6, start
+    call write
+    pop r7
+    pop r6
+    call puts
+    ldi r6, colon
+    call write
+    pop r7
+    pop r6
+    call puts
+    ldi r6, newline
+    call write
+    halt
