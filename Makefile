@@ -9,10 +9,10 @@ strip:
 	tstrip -a -- tests/*.tb
 
 lib/%.to: lib/%.telda lib/%/*.telda
-	tc $<
+	tasm $<
 	tstrip $@
 %.to: %.telda
-	tc $^
+	tasm $^
 lib/std.savn: lib/io.to lib/mem.to lib/convert.to lib/strcmp.to lib/rt.to
 	tar -o $@ $^
 
