@@ -198,8 +198,8 @@ check_loop_end:
 
 compiler_end:
     ldi r1h, 0x0a
-    store r0, 0xffff, r1h
-    store r0, 0xffff, r0b
+    store r0, 0xfffe, r1h
+    store r0, 0xfffe, r0b
     ; this is the end
     halt
 

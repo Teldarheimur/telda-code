@@ -1,6 +1,6 @@
 .PHONY: all
 
-all: sierpinski.to q.to
+all: sierpinski.to q.to brainfuck.to
 	
 
 sierpinski.to: sierpinski.bf bf.tb
@@ -8,6 +8,9 @@ sierpinski.to: sierpinski.bf bf.tb
 
 q.to: q.bf bf.tb
 	./bf.tb < q.bf > q.to
+
+brainfuck.to: brainfuck.bf bf.tb
+	./bf.tb < brainfuck.bf > brainfuck.to
 
 bf.tb: bf.to
 	tl -e -o bf.tb bf.to

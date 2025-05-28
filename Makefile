@@ -3,7 +3,7 @@
 FLAGS=-e
 tlf=tl $(FLAGS)
 
-all: tests/hello.tb tests/hello_direct.tb tests/call_hello.tb tests/catl.tb tests/mem_test.tb tests/copy_test.tb tests/password.tb tests/password_compact.tb tests/intos_test.tb tests/parse_test.tb tests/main_hello.tb
+all: tests/hello.tb tests/hello_direct.tb tests/call_hello.tb tests/catl.tb tests/mem_test.tb tests/copy_test.tb tests/password.tb tests/password_compact.tb tests/intos_test.tb tests/parse_test.tb tests/main_hello.tb tests/busy.tb
 	
 strip:
 	tstrip -a -- tests/*.tb
