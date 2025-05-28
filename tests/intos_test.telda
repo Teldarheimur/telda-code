@@ -1,5 +1,5 @@
-.ref _print
-.ref _uitos
+.ref print
+.ref uitos
 
 .seg data
 buf:
@@ -7,11 +7,11 @@ buf:
 
 .seg text
 .entry
-_start:
+start:
     ldi r6b, 21
     ldi r7, buf
-    call _uitos
+    call uitos
     ldi r6, buf
-    call _print
+    call print
 
     halt

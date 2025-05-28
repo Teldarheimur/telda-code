@@ -1,7 +1,7 @@
 .seg text
-_zero:
+zero:
     ldi r8b, 0
-_set:
+set:
     ldi r1l, 1
     ldi r1h, 0
     ldi r9b, 0

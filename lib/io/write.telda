@@ -5,7 +5,7 @@
 ;    syscall
 ;     ret
 
-_write:
+write:
     push r2l
     ldi r7b, '\0'
     ldi r8b, 1
@@ -14,21 +14,21 @@ loop_Write:
     load r2l, r6, r0
     ; if this is a zero-byte, we're done
     sub r0b, r2l, r7b
-    jez _write_return
+    jez write_return
     ; otherwise, write it out and increment the r6 address
     ldi r1, 4
     syscall
     add r6, r6, r8
     jmp loop_Write
 
-_print:
+print:
     push rl
-    call _write
+    call write
     pop rl
     push r2l
     ldi r2l, '\n'
     ldi r1, 4
     syscall
-_write_return:
+write_return:
     pop r2l
     ret

@@ -1,15 +1,15 @@
-.ref _print
+.ref print
 
 .seg rodata
 hello:
     .string Hello, World!!\0
 
-.global _main
+.global main
 .seg text
-_main:
+main:
     push rl
     ldi r6, hello
-    call _print
+    call print
 
     ; zero r1 to return sucessfully
     xor r1, r1, r1

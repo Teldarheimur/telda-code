@@ -1,5 +1,5 @@
 .seg text
-_copy:
+copy:
     ldi r9b, 0
     ldi r1h, 0
     jmp loop_Copy_check

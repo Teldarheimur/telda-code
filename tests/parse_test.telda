@@ -1,30 +1,30 @@
-.ref _readLine
-.ref _parse
-.ref _uitos
-.ref _print
-.ref _write
+.ref readLine
+.ref parse
+.ref uitos
+.ref print
+.ref write
 
 .seg text
-_start:
+start:
 .entry
     ldi r6, prompt
-    call _write
+    call write
 
     ldi r6, buf
-    call _readLine
+    call readLine
     ldi r6, buf
-    call _parse
+    call parse
     or r2, r0, r1
 
     ldi r6, answer
-    call _write
+    call write
 
     or r6, r0, r2
     ldi r7, buf
-    call _uitos
+    call uitos
 
     ldi r6, buf
-    call _print
+    call print
 
     halt
 

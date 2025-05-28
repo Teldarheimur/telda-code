@@ -62,27 +62,27 @@ unknown:
 
 print_error:
     ldi r6, trap_error
-    call _write
+    call write
     or r6, r2, r0
-    call _print
+    call print
     halt
 
 .seg rodata
 error_msg:
     .string Did not exit successfully: \0
 
-.ref _write
-.ref _print
-.ref _uitos
+.ref write
+.ref print
+.ref uitos
 
-.ref _main
+.ref main
 .seg text
 .entry
-_start:
+start:
     ldi r1, 15
     ldi r2, trap_handler
     syscall
-    call _main
+    call main
     push r1
     ldi r1, 15
     ldi r2, 0
@@ -92,13 +92,13 @@ _start:
     sub r2, r1, r0
     jez done
     ldi r6, error_msg
-    call _write
+    call write
     ; print return value
     or r6, r2, r0
     ldi r7, buf
-    call _uitos
+    call uitos
     ldi r6, buf
-    call _print
+    call print
 done:
     halt
 

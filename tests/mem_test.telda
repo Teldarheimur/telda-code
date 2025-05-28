@@ -1,31 +1,31 @@
-.ref _zero
-.ref _copy
-.ref _print
-.ref _set
+.ref zero
+.ref copy
+.ref print
+.ref set
 
 .seg text
 .entry
     ldi r6, ape
-    call _print
+    call print
     ldi r6, ape2
-    call _print
+    call print
 
     ldi r6, 5
     ldi r7, ape
-    call _zero
+    call zero
     ldi r6, 4
     ldi r7, ape
     ldi r8b, 'A'
-    call _set
+    call set
     ldi r6, 5
     ldi r7, ape2
     ldi r8, ape
-    call _copy
+    call copy
 
     ldi r6, ape
-    call _print
+    call print
     ldi r6, ape2
-    call _print
+    call print
 
     halt
 

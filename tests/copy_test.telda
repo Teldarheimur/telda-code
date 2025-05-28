@@ -1,35 +1,35 @@
-.ref _copy
-.ref _print
-.ref _set
-.ref _zero
+.ref copy
+.ref print
+.ref set
+.ref zero
 
 .seg text
 .entry
-_start:
+start:
     ldi r6b, 4
     ldi r7, buf
     ldi r8, hello
-    call _copy
+    call copy
 
     ldi r6, buf
-    call _print
+    call print
 
     ldi r6b, 4
     ldi r7, buf
     ldi r8b, '!' 
-    call _set
+    call set
 
     ldi r6, buf
-    call _print
+    call print
 
     ldi r6b, 4
     ldi r7, hello
     ldi r8b, 3
     add r7, r7, r8
-    call _zero
+    call zero
 
     ldi r6, hello
-    call _print
+    call print
 
     halt
 

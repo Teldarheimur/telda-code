@@ -1,10 +1,10 @@
 # r6 (size), r7 (dest_addr), writes size zeroes to dest_addr
-.global _zero
+.global zero
 # r6 (size), r7 (dest_addr), r8b (char) writes char to dest_addr size times
-.global _set
+.global set
 .include mem/set.telda
 
 # r6 (size), r7 (dest_addr), r8 (src_addr) copy dest_addr to src_addr with size bytes
-.global _copy
+.global copy
 .include mem/copy.telda
 

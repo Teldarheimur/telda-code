@@ -1,4 +1,4 @@
-.ref _print
+.ref print
 
 .seg rodata
 hello:
@@ -7,5 +7,5 @@ hello:
 .seg text
 .entry
     ldi r6, hello
-    call _print
+    call print
     halt

@@ -1,9 +1,9 @@
 # Signed int to string
 # Make sure that str is at least log_10(num) long (7 is max for 16-bit ints (remember the final null-byte in the string))
 .seg text
-_sitos:
+sitos:
     sub r0, r6, r0
-    jb _uitos
+    jb uitos
 
     # bl = r1l
     ldi r1l, '-'
@@ -13,10 +13,10 @@ _sitos:
     sub r6, r0, r6
     # we can ignore overflow since -MIN_INT wraps to MIN_INT
     # which if interpreted unsigned is actually abs(MIN_INT)
-    ; jump _uitos # this jump is unnecessary since these are right after each other
+    ; jump uitos # this jump is unnecessary since these are right after each other
 
 ; Make sure that str is at least log_10(num) long (6 is max for 16-bit ints (remember the final null-byte in the string))
-_uitos:
+uitos:
     or r8, r6, r0
 
 num_len:

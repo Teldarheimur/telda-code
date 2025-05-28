@@ -8,7 +8,7 @@ all: tests/hello.tb tests/hello_direct.tb tests/call_hello.tb tests/catl.tb test
 strip:
 	tstrip -a -- tests/*.tb
 
-lib/%.to: lib/%.telda lib/%/*.telda
+lib/%.to: lib/%.telda $(wildcard lib/%/*.telda)
 	tasm $<
 	tstrip $@
 %.to: %.telda

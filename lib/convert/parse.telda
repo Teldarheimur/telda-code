@@ -1,5 +1,5 @@
 .seg text
-_parse:
+parse:
     push r10
     or r7, r0, r6
     # Check for minus

@@ -2,21 +2,21 @@
 line:
     .string \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0
 
-.ref _readLine
-.ref _print
+.ref readLine
+.ref print
 
 .seg rodata
     write_smth:
     .string Write something:\0
 
 .seg text
-_start:
+start:
 .entry
     ldi r6, write_smth
-    call _print
+    call print
     ldi r6, line
-    call _readLine
+    call readLine
     ldi r6, line
-    call _print
+    call print
 
     halt

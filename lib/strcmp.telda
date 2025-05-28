@@ -1,9 +1,9 @@
-.global _strcmp
+.global strcmp
 
 .seg text
 ; r6 (s1), r7 (s2)
 ; Returns r1l, 0 if equal
-_strcmp:
+strcmp:
     ; using r8 as index starting at 0
     ldi r8b, 0
     ldi r9b, 1
