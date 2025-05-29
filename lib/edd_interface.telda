@@ -33,6 +33,7 @@ puts:
     push r2l
     ldi r8b, 0
     ldi r9b, 1
+    jmp check_puts
 loop_puts:
     ; load byte into r2l and write it to out pin
     load r2l, r6, r8
@@ -41,6 +42,7 @@ loop_puts:
     ; increment r8
     add r8, r8, r9
     ; check if r8 if it's < length
+check_puts:
     sub r0, r8, r7
     jlt loop_puts
     pop r2l

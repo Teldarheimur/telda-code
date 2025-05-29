@@ -1,0 +1,64 @@
+# r6 (src_addr), r7 (len)
+.ref puts
+# r6 (n)
+.ref puti32
+# r6 (n)
+.ref putu32
+# r6 (n)
+.ref puti16
+# r6 (n)
+.ref putu16
+# r6 (n)
+.ref puti8
+# r6 (n)
+.ref putu8
+
+.seg rodata
+hello:
+    .string Hi! We\x27re gonna look at some numbers\n
+space:
+    .string \x20
+newline:
+    .string \n
+
+.seg text
+.global main
+main:
+    push rl
+    ldi r6, hello
+    ldi r7b, 37
+    call puts
+
+    ldi r6, 0xae59
+    ldi r7, 0xf003
+    call puti32
+    ldi r6, space
+    call puts
+    ldi r6, 0xae59
+    ldi r7, 0xf003
+    call putu32
+    ldi r6, space
+    call puts
+
+    ldi r6, 0xae59
+    call puti16
+    ldi r6, space
+    call puts
+    ldi r6, 0xae59
+    call putu16
+    ldi r6, space
+    call puts
+
+    ldi r6b, 0xae
+    call puti8
+    ldi r6, space
+    call puts
+    ldi r6b, 0xae
+    call putu8
+
+    ldi r6, newline
+    call puts
+
+    ldi r1, 0
+    pop rl
+    ret
