@@ -33,30 +33,36 @@ main:
     ldi r7, 0xf003
     call puti32
     ldi r6, space
+    ldi r7b, 1
     call puts
     ldi r6, 0xae59
     ldi r7, 0xf003
     call putu32
     ldi r6, space
+    ldi r7b, 1
     call puts
 
     ldi r6, 0xae59
     call puti16
     ldi r6, space
+    ldi r7b, 1
     call puts
     ldi r6, 0xae59
     call putu16
     ldi r6, space
+    ldi r7b, 1
     call puts
 
     ldi r6b, 0xae
     call puti8
     ldi r6, space
+    ldi r7b, 1
     call puts
     ldi r6b, 0xae
     call putu8
 
     ldi r6, newline
+    ldi r7b, 1
     call puts
 
     ldi r1, 0
