@@ -1,0 +1,9 @@
+# r6, r7 (num), r8 (str), writes num as a decimal number in x, make sure str has space for log_10(num)+1 bytes (digits + null-terminator)
+.global uitos32
+# r6, r7 (num), r8 (str), same as uitos but handles negative correctly
+.global sitos32
+.include convert32/tos.telda
+
+# # r6 (str), returns (r1) number giving by the string in the a register
+# .global parse32
+# .include convert32/parse.telda

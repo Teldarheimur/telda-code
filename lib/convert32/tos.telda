@@ -1,0 +1,130 @@
+# Signed int to string
+# Make sure that str is at least log_10(num) long (12 is max for 32-bit ints (remember the final null-byte in the string))
+.seg text
+; n (r6, r7), s (r8)
+sitos32:
+    sub r0, r7, r0
+    jb uitos32
+
+    # bl = r1l
+    ldi r1l, '-'
+    store r8, r0, r1l
+    ldi r9b, 1
+    add r8, r8, r9
+    sub r6, r0, r6
+    sbb r7, r0, r7
+    # we can ignore overflow since -MIN_INT wraps to MIN_INT
+    # which if interpreted unsigned is actually abs(MIN_INT)
+    ; jump uitos32 # this jump is unnecessary since these are right after each other
+
+; Make sure that str is at least log_10(num) long (12 is max for 32-bit ints (remember the final null-byte in the string))
+uitos32:
+    push rl
+
+    push r6
+    push r7
+num_len32:
+    ldi r9b, 1
+    add r8, r8, r9
+    call div10_u32
+
+    sub r0, r6, r0
+    jnz num_len32
+    sub r0, r7, r0
+    jnz num_len32
+
+    ; put the final null byte already
+    store r8, r0, r0
+
+    pop r7
+    pop r6
+loop_IntTos32:
+    ldi r9b, 1
+    sub r8, r8, r9
+    ; get the next digit by doing mod 10 and then since that'll be in 0..=9, just adding '0' will convert it to the current character
+    ; divide by 10 to get the next number, and just return if the result is zero
+    call divrem10_u32
+    ldi r9b, '0'
+    add r1l, r1l, r9b
+    ; then put it into the string and decrement the pointer
+    store r8, r0, r1l
+    sub r0, r6, r0
+    jnz loop_IntTos32
+    sub r0, r7, r0
+    jnz loop_IntTos32
+
+    pop rl
+    ret
+
+; clobbers nothing
+; r6, r7 -> r6, r7
+div10_u32:
+#    let n = n as u64 * 3435973837;
+#    return (n >> 35) as u32;
+    push r1
+    push r2
+    push r3
+    push r4
+    push r8
+    push r9
+
+    ; load magic number for division by 10
+    ldi r8, 0xcccd
+    ldi r9, 0xcccc
+
+    ; r6, r7 * r8, r9 =
+    ; l1: l(r6 * r8)
+    mul r1, r0, r6, r8
+    ; l2: l(r6 * r9) + l(r7 * r8) + r1=h(r6 * r8)
+    mul r2, r3, r6, r9
+    add r1, r1, r3
+    adc r2, r2, r0
+    mul r4, r3, r7, r8
+    add r1, r1, r3
+    adc r4, r4, r0
+    ; r1 = l3: r2=h(r6 * r9) + r4=h(r7 * r8) + l(r7 * r9) + carry
+    add r1, r2, r4
+    setc r6b
+    mul r2, r3, r7, r9
+    ; r2 = l4: r2=h(r7 * r9) + carry
+        ; shouldn't overflow
+    add r1, r1, r3
+    add r2, r2, r6
+
+    ; now r6, r7 * r8, r9 = r0, r0, r1, r2
+    ; r6, r7 = r1, r2 >> 3
+
+    ldi r8b, 3
+    ldi r9b, 5
+    lsr r6, r1, r8
+    shl r1, r2, r9
+    or r6, r1, r6
+    lsr r7, r2, r8
+
+    pop r9
+    pop r8
+    pop r4
+    pop r3
+    pop r2
+    pop r1
+    ret
+
+; clobbers nothing
+; r6, r7 -> r1h, r6, r7
+divrem10_u32:
+    push rl
+    push r8
+
+    push r6
+    call div10_u32
+    pop r8
+
+    # multiply the result by 10 and then subtract the original value
+    # but ignore the upper 24-bites completely since the value will be 0-10
+    ldi r1l, 10
+    mul r0b, r1l, r6b, r1l
+    sub r1l, r8b, r1l
+
+    pop r8
+    pop rl
+    ret

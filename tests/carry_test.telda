@@ -1,0 +1,59 @@
+.seg data
+number:
+    .string 0000000000000000000000000\0
+
+.ref print
+.ref uitos32
+.ref sitos32
+.ref uitos
+
+.seg text
+.entry
+    ldi r6b, 100
+    ldi r7b, 200
+    add r6b, r6b, r7b
+    setc r10b
+    ldi r7, number
+    call uitos
+    ldi r6, number
+    call print
+    or r6, r0, r10
+    ldi r7, number
+    call uitos
+    ldi r6, number
+    call print
+
+    ; load 0x2_ffff
+    ldi r6, 0xffff
+    ldi r7, 2
+    ; load 1
+    ldi r8, 1
+    ldi r9, 0
+    call u32_add
+    push r6
+    push r7
+    ldi r8, number
+    call uitos32
+    ldi r6, number
+    call print
+
+    pop r7
+    pop r6
+    ldi r8, 1
+    ldi r9, 0
+    call u32_sub
+    ldi r8, number
+    call uitos32
+    ldi r6, number
+    call print
+
+    halt
+
+u32_add:
+    add r6, r6, r8
+    adc r7, r7, r9
+    ret
+u32_sub:
+    sub r6, r6, r8
+    sbb r7, r7, r9
+    ret
