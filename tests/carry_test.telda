@@ -9,19 +9,14 @@ number:
 
 .seg text
 .entry
-    ldi r6b, 100
-    ldi r7b, 200
-    add r6b, r6b, r7b
-    setc r10b
+    ldi r6b, 5000
+    ldi r7b, 0
+    call div10_u32
     ldi r7, number
     call uitos
     ldi r6, number
     call print
-    or r6, r0, r10
-    ldi r7, number
-    call uitos
-    ldi r6, number
-    call print
+
 
     ; load 0x2_ffff
     ldi r6, 0xffff
@@ -56,4 +51,60 @@ u32_add:
 u32_sub:
     sub r6, r6, r8
     sbb r7, r7, r9
+    ret
+
+
+
+; clobbers nothing
+; r6, r7 -> r6, r7
+div10_u32:
+#    let n = n as u64 * 3435973837;
+#    return (n >> 35) as u32;
+    push r1
+    push r2
+    push r3
+    push r4
+    push r8
+    push r9
+
+    ; load magic number for division by 10
+    ldi r8, 0xcccd
+    ldi r9, 0xcccc
+
+    ; r6, r7 * r8, r9 =
+    ; l1 (r0): l(r6 * r8)
+    mul r1, r0, r6, r8
+    ; l2 (r1): r1<-(r3<-l(r6 * r9) + r1=h(r6 * r8)) + r3<-l(r7 * r8)
+    mul r2, r3, r6, r9
+    add r1, r1, r3
+    adc r2, r2, r0
+    mul r4, r3, r7, r8
+    ; might as well add this into r0 because we don't need the result
+    add r1, r1, r3
+    adc r4, r4, r0
+    ; r1 <- l3: r2=(h(r6 * r9) + carry) + r4=(h(r7 * r8) + carry) + l(r7 * r9)
+    add r1, r2, r4
+    setc r6b
+    mul r2, r3, r7, r9
+    ; r2 <- l4: r2=h(r7 * r9) + carry
+        ; shouldn't overflow
+    add r1, r1, r3
+    add r2, r2, r6
+
+    ; now r6, r7 * r8, r9 = r0, r0, r2, r1
+    ; r6, r7 = r2, r1 >> 3
+
+    ldi r8b, 3
+    ldi r9b, 5
+    lsr r6, r1, r8
+    shl r1, r2, r9
+    or r6, r1, r6
+    lsr r7, r2, r8
+
+    pop r9
+    pop r8
+    pop r4
+    pop r3
+    pop r2
+    pop r1
     ret
