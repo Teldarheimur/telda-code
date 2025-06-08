@@ -1,8 +1,8 @@
 # r6 (src_addr), r7 (len)
 .global puts
-# r6 (n)
+# r6, r7 (n)
 .global puti32
-# r6 (n)
+# r6, r7 (n)
 .global putu32
 # r6 (n)
 .global puti16
@@ -14,12 +14,14 @@
 .global putu8
 
 .ref uitos
+.ref uitos32
 .ref sitos
+.ref sitos32
 .ref write
 
 .seg data
 buf:
-    .string \0\0\0\0\0\0\0\0
+    .string \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0
 .seg rodata
 start:
     .string Panic at \0
@@ -56,11 +58,15 @@ write_buf:
 
 putu8:
     ; assume that r6 was loaded into with zero-extension
-putu32:
 putu16:
     push rl
     ldi r7, buf
     call uitos
+    jmp write_buf
+putu32:
+    push rl
+    ldi r8, buf
+    call uitos32
     jmp write_buf
 
 puti8:
@@ -72,11 +78,15 @@ puti8:
     ; sign extend
     ldi r7, 0xff00
     or r6, r6, r7
-puti32:
 puti16:
     push rl
     ldi r7, buf
     call sitos
+    jmp write_buf
+puti32:
+    push rl
+    ldi r8, buf
+    call sitos32
     jmp write_buf
 
 .global panic
