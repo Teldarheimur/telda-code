@@ -62,55 +62,44 @@ div10_u32:
 #    let n = n as u64 * 3435973837;
 #    return (n >> 35) as u32;
     push r1
-    push r2
-    push r3
-    push r4
     push r8
     push r9
+
+    ldi r1h, 0
+    ldi r8b, 1
+    add r6, r6, r8
+    adc r7, r7, r0
 
     ; load magic number for division by 10
     ldi r8, 0xcccd
     ldi r9, 0xcccc
 
-    ; r6, r7 * r8, r9 =
-    ; l1: l(r6 * r8)
-    mul r1, r0, r6, r8
-    ; l2: l(r6 * r9) + l(r7 * r8) + r1=h(r6 * r8)
-    mul r2, r3, r6, r9
-    add r1, r1, r3
-    adc r2, r2, r0
-    mul r4, r3, r7, r8
-    add r1, r1, r3
-    adc r4, r4, r0
-    ; r1 = l3: r2=h(r6 * r9) + r4=h(r7 * r8) + l(r7 * r9) + carry
-    add r1, r2, r4
-    setc r6b
-    mul r2, r3, r7, r9
-    ; r2 = l4: r2=h(r7 * r9) + carry
-        ; shouldn't overflow
-    add r1, r1, r3
-    add r2, r2, r6
+    ; * 3435973837 >> 32
+    ; (also losing accuracy in the lowest bit which is shifted away anyways
+    mul r6, r0, r6, r9
+    mul r8, r0, r7, r8
+    add r6, r6, r8
+    setc r1l
+    mul r9, r8, r7, r9
+    add r6, r6, r8
+    adc r7, r9, r1
 
-    ; now r6, r7 * r8, r9 = r0, r0, r1, r2
-    ; r6, r7 = r1, r2 >> 3
-
+    ; >> 3
     ldi r8b, 3
-    ldi r9b, 5
-    lsr r6, r1, r8
-    shl r1, r2, r9
-    or r6, r1, r6
-    lsr r7, r2, r8
+    ldi r9b, 13
+    lsr r6, r6, r8
+    shl r9, r7, r9
+    or r6, r9, r6
+    lsr r7, r7, r8
 
     pop r9
     pop r8
-    pop r4
-    pop r3
-    pop r2
     pop r1
     ret
 
+
 ; clobbers nothing
-; r6, r7 -> r1h, r6, r7
+; r6, r7 -> r1l, r6, r7
 divrem10_u32:
     push rl
     push r8
