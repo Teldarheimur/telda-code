@@ -70,11 +70,11 @@ putu32:
     jmp write_buf
 
 puti8:
-    # if n > 0x7f:
+    # if n & 0x80:
     #    n |= 0xff00;
-    ldi r7b, 0x7f
-    sub r0b, r6b, r7b
-    jle puti16
+    ldi r7b, 0x80
+    and r0b, r6b, r7b
+    jez puti16
     ; sign extend
     ldi r7, 0xff00
     or r6, r6, r7

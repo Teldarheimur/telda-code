@@ -3,7 +3,7 @@
 .seg text
 sitos:
     sub r0, r6, r0
-    jb uitos
+    jgt uitos
 
     # bl = r1l
     ldi r1l, '-'

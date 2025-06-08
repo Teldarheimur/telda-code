@@ -4,7 +4,7 @@
 ; n (r6, r7), s (r8)
 sitos32:
     sub r0, r7, r0
-    jb uitos32
+    jge uitos32
 
     # bl = r1l
     ldi r1l, '-'
